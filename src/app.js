@@ -9,6 +9,7 @@
 	console.log(getStr());
 	console.log('test');
 	
-	if (true)
+	if (true) {
 		console.log('test2');
+	}
 })();

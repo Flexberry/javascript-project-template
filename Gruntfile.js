@@ -19,7 +19,13 @@ module.exports = function(grunt) {
 	
 	githooks: {
 	  all: {
-	    'pre-commit': 'jshint'
+	    'pre-commit': 'jshint',
+		options: {
+			hashbang: '#!/bin/sh',
+			template: 'githook.hb',
+			startMarker: '## LET THE FUN BEGIN',
+			endMarker: '## PARTY IS OVER'
+		}
 	  }
 	},
 	
@@ -27,6 +33,7 @@ module.exports = function(grunt) {
       files: ['src/*.js'],
       options: {
         camelcase: true,
+		curly: true,
         globals: {
           jQuery: true,
           console: false,
@@ -41,4 +48,5 @@ module.exports = function(grunt) {
   // githooks - Binds grunt tasks to git hooks
   grunt.registerTask('default', ['githooks', 'uglify']);
 
+  grunt.registerTask('test', ['jshint']);
 };
