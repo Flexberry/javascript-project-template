@@ -9,7 +9,7 @@
 	console.log(getStr());
 	console.log('test');
 	
-	if (true) {
-		console.log('jshint test');
-	}
+	if (false) {
+        console.log('jshint test');
+    }
 })();
