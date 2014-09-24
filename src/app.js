@@ -8,5 +8,7 @@
 
 	console.log(getStr());
 	console.log('test');
-	console.log('test2');
+	
+	if (true)
+		console.log('test2');
 })();
