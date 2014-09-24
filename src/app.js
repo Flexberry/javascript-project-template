@@ -1,0 +1,10 @@
+(function() {
+	'use strict';
+	
+	function getStr() {
+		var str = 'Hello World!!!';
+		return str;
+	}
+
+	console.log(getStr());
+})();
