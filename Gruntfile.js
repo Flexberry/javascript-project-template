@@ -1,5 +1,8 @@
 module.exports = function(grunt) {
 
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-githooks');
+
   // Project configuration.
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
@@ -11,13 +14,16 @@ module.exports = function(grunt) {
         src: 'src/*.js',
         dest: 'build/<%= pkg.name %>.min.js'
       }
-    }
+    },
+	githooks: {
+	  all: {
+	    'pre-commit': 'jshint'
+	  }
+	}
   });
 
-  // Load the plugin that provides the "uglify" task.
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-
   // Default task(s).
-  grunt.registerTask('default', ['uglify']);
+  // githooks - Binds grunt tasks to git hooks
+  grunt.registerTask('default', ['githooks', 'uglify']);
 
 };
