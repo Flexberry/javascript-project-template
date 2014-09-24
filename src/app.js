@@ -8,4 +8,5 @@
 
 	console.log(getStr());
 	console.log('test');
+	console.log('test2');
 })();
