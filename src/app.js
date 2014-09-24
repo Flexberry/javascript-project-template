@@ -10,6 +10,6 @@
 	console.log('test');
 	
 	if (true) {
-		console.log('test2');
+		console.log('jshint test');
 	}
 })();
