@@ -2,6 +2,7 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-githooks');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   // Project configuration.
   grunt.initConfig({
@@ -15,11 +16,25 @@ module.exports = function(grunt) {
         dest: 'build/<%= pkg.name %>.min.js'
       }
     },
+	
 	githooks: {
 	  all: {
 	    'pre-commit': 'jshint'
 	  }
-	}
+	},
+	
+	jshint: {
+      files: ['src/*.js'],
+      options: {
+        camelcase: true,
+        globals: {
+          jQuery: true,
+          console: false,
+          module: true,
+          document: true
+        }
+      }
+    }
   });
 
   // Default task(s).

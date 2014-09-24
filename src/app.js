@@ -7,4 +7,5 @@
 	}
 
 	console.log(getStr());
+	console.log('test');
 })();
