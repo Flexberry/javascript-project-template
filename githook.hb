@@ -51,7 +51,7 @@ if [ $EXITCODE -eq 0 ]; then
 	echo -en "${BGGREEN}${WHITE} OK ${NORMAL} \n\n"
 else
 	echo -en "${BGRED}${WHITE} ABORT ${NORMAL} \n\n"
-	echo -en "$OUTPUT"
+	echo "$OUTPUT"
 fi
 	
 exit $EXITCODE
