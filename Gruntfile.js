@@ -19,12 +19,13 @@ module.exports = function(grunt) {
 	
 	githooks: {
 	  all: {
-	    'pre-commit': 'jshint',
+	    'pre-commit': 'test',
 		options: {
 			hashbang: '#!/bin/sh',
 			template: 'githook.hb',
 			startMarker: '## LET THE FUN BEGIN',
-			endMarker: '## PARTY IS OVER'
+			endMarker: '## PARTY IS OVER',
+			preventExit: false
 		}
 	  }
 	},

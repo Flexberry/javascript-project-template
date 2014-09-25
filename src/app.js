@@ -9,6 +9,7 @@
 	console.log(getStr());
 	console.log('test');
 	
-	if (false)
+	if (false) {
         console.log('jshint test');
+	}
 })();

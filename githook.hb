@@ -43,15 +43,17 @@ BGCYAN='\033[46m'     #  ${BGCYAN}
 BGGRAY='\033[47m'     #  ${BGGRAY}
 BGDEF='\033[49m'      #  ${BGDEF}
 
-echo -en "\n ${BGBLACK}${WHITE} Задача {{task}} проверит, все ли хорошо...${NORMAL} "
+echo -en "\n ${BGBLACK}${WHITE} Задача {{command}}{{#if task}} {{task}}{{/if}}{{#if args}} {{args}}{{/if}} проверит, все ли хорошо...${NORMAL} "
 OUTPUT=$(cd '{{gruntfileDirectory}}' && {{command}}{{#if task}} {{task}}{{/if}}{{#if args}} {{args}}{{/if}})
 EXITCODE=$?
 
 if [ $EXITCODE -eq 0 ]; then
 	echo -en "${BGGREEN}${WHITE} OK ${NORMAL} \n\n"
 else
-	echo -en "${BGRED}${WHITE} ABORT ${NORMAL} \n\n"
+	echo -en "${BGRED}${WHITE} {{#if preventExit}}IGNORE{{else}}ABORT{{/if}} ${NORMAL} \n\n"
 	echo "$OUTPUT"
 fi
 	
+{{#unless preventExit}}
 exit $EXITCODE
+{{/unless}}
