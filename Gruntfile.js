@@ -50,4 +50,6 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['githooks', 'uglify']);
 
   grunt.registerTask('test', ['jshint']);
+  
+  grunt.registerTask('travis', 'jshint');
 };
