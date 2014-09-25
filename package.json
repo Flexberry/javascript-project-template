@@ -10,6 +10,6 @@
     "grunt-githooks": "^0.3.1"
   },
   "scripts": {
-    "travis-build": "grunt travis --verbose"
+    "travisbuild": "grunt travis --verbose"
   }
 }
