@@ -33,14 +33,7 @@ module.exports = function(grunt) {
 	jshint: {
       files: ['src/*.js'],
       options: {
-        camelcase: true,
-		curly: true,
-        globals: {
-          jQuery: true,
-          console: false,
-          module: true,
-          document: true
-        }
+        jshintrc: true
       }
     }
   });
