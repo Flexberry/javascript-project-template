@@ -9,7 +9,7 @@ module.exports = function(grunt) {
             },
             build: {
                 src: 'src/*.js',
-                dest: 'build/<%= pkg.name %>.min.js'
+                dest: 'dest/build/<%= pkg.name %>.min.js'
             }
         },
 
@@ -54,10 +54,25 @@ module.exports = function(grunt) {
                 src: ['src/*.js'], 
                 options: {
                     configure: '.jsdocrc',
-                    destination: 'docs'
+                    destination: 'dest'
                 }
             }
-        }
+        },
+        
+        'gh-pages': {
+            options: {    
+              git: 'C:\\Program Files (x86)\\Git\\bin\\git.exe'
+            },
+            publish: {
+                options: {
+                    base: 'dest',
+                    branch: 'gh-pages',
+					message: 'auto publish',
+                    add: false
+				},
+                src: ['**/*']
+            }
+          }
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -66,6 +81,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-jslint');
     grunt.loadNpmTasks('grunt-jsdoc');
     grunt.loadNpmTasks('grunt-contrib-clean');
+    grunt.loadNpmTasks('grunt-gh-pages');
 
     // githooks - Binds grunt tasks to git hooks
     grunt.registerTask('default', ['githooks', 'uglify']);
