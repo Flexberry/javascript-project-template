@@ -61,13 +61,13 @@ module.exports = function(grunt) {
         
         'gh-pages': {
             options: {    
-              git: 'C:\\Program Files (x86)\\Git\\bin\\git.exe'
+              git: 'git'
             },
             publish: {
                 options: {
                     base: 'dest',
                     branch: 'gh-pages',
-					message: 'auto publish',
+                    message: 'auto publish',
                     add: false
 				},
                 src: ['**/*']
@@ -88,7 +88,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('test', ['jshint', 'jslint']);
 
-    grunt.registerTask('travis', ['jshint', 'jslint']);
+    grunt.registerTask('travis', ['jshint', 'jslint', 'gh-pages:publish']);
     
     grunt.registerTask('docs', ['clean', 'jsdoc']);
 };
