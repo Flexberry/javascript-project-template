@@ -47,7 +47,7 @@ module.exports = function(grunt) {
             }
         },
         
-        clean: ['docs/'],
+        clean: ['dest/'],
         
         jsdoc : {
             dist : {
@@ -88,7 +88,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('test', ['jshint', 'jslint']);
 
-    grunt.registerTask('travis', ['jshint', 'jslint', 'gh-pages:publish']);
+    grunt.registerTask('travis', ['jshint', 'jslint', 'clean', 'uglify', 'jsdoc', 'gh-pages:publish']);
     
     grunt.registerTask('docs', ['clean', 'jsdoc']);
 };
