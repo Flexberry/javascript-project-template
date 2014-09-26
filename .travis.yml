@@ -1,9 +1,15 @@
 language: node_js
 node_js:
-  - 0.10
-  
+- 0.1
 before_script:
-  - npm update -g npm
-  - npm install -g grunt-cli
+- npm update -g npm
+- npm install -g grunt-cli
+script:
+- npm test
+branches:
+  only:
+  - master
   
-script: npm test
+env:
+  global:
+    secure: gMBDyxuJebMakMkyp+I9c78Peml6j6msfXjlGI46Amcpg3Hc1G5+HrzoyTfPoQBbA7JDFSePuvjaY2eC+FYaSD4yD7nKOBOjPA+yiEcxlotjFkKu5D5r37wAwLs5yz+VzHKNPyopui/BI6JQvSYbi+HM87KKrsSM9QjcNj/XdAg=
