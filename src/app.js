@@ -1,4 +1,7 @@
-﻿(function () {
+﻿/**
+ * @module Demo module
+ */
+(function () {
     'use strict';
 
     function getStr() {

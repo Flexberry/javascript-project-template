@@ -45,6 +45,18 @@ module.exports = function(grunt) {
                     devel: true
                 }
             }
+        },
+        
+        clean: ['docs/'],
+        
+        jsdoc : {
+            dist : {
+                src: ['src/*.js'], 
+                options: {
+                    configure: '.jsdocrc',
+                    destination: 'docs'
+                }
+            }
         }
     });
 
@@ -52,6 +64,8 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-githooks');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-jslint');
+    grunt.loadNpmTasks('grunt-jsdoc');
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
     // githooks - Binds grunt tasks to git hooks
     grunt.registerTask('default', ['githooks', 'uglify']);
@@ -59,4 +73,6 @@ module.exports = function(grunt) {
     grunt.registerTask('test', ['jshint', 'jslint']);
 
     grunt.registerTask('travis', ['jshint', 'jslint']);
+    
+    grunt.registerTask('docs', ['clean', 'jsdoc']);
 };
