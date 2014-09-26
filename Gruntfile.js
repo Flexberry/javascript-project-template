@@ -60,7 +60,7 @@ module.exports = function(grunt) {
         },
         
         'gh-pages': {
-            options: {    
+            options: {
               git: 'git'
             },
             publish: {
@@ -71,8 +71,22 @@ module.exports = function(grunt) {
                     add: false
 				},
                 src: ['**/*']
+            },
+            deploy: {
+                options: {
+                    base: 'dest',
+                    branch: 'gh-pages',
+                    message: 'auto deploy',
+                    user: {
+                        name: 'Flexberry',
+                        email: 'mail@flexberry.net'
+                    },
+                    repo: 'https://' + process.env.GH_TOKEN + '@github.com/Flexberry/testproj.git',
+                    silent: true
+                },
+                src: ['**/*']
             }
-          }
+        }
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -88,7 +102,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('test', ['jshint', 'jslint']);
 
-    grunt.registerTask('travis', ['jshint', 'jslint', 'clean', 'uglify', 'jsdoc', 'gh-pages:publish']);
+    grunt.registerTask('travis', ['jshint', 'jslint', 'clean', 'uglify', 'jsdoc', 'gh-pages:deploy']);
     
     grunt.registerTask('docs', ['clean', 'jsdoc']);
 };
