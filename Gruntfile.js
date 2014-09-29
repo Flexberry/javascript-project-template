@@ -128,7 +128,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('test', ['jshint', 'jslint', 'clean', 'uglify', 'qunit']);
 
-    grunt.registerTask('travis', ['jshint', 'jslint', 'clean', 'uglify', 'jsdoc', 'gh-pages:deploy', 'coveralls']);
+    grunt.registerTask('travis', ['jshint', 'jslint', 'clean', 'uglify', 'jsdoc', 'gh-pages:deploy', 'qunit', 'coveralls']);
     
     grunt.registerTask('docs', ['clean', 'jsdoc']);
 };
