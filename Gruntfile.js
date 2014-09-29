@@ -47,7 +47,7 @@ module.exports = function(grunt) {
             }
         },
         
-        clean: ['dest/', 'test/report'],
+        clean: ['dest/', 'test/report/'],
         
         jsdoc : {
             dist : {
@@ -101,6 +101,15 @@ module.exports = function(grunt) {
                 }
             },
             all: ['test/**/*.html', '!test/report/**/*.html']
+        },
+        
+        coveralls: {
+            options: {
+                force: true
+            },
+            all: {
+                src: "test/report/lcov/lcov.info"
+            }
         }        
     });
 
@@ -112,13 +121,14 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-gh-pages');
     grunt.loadNpmTasks('grunt-qunit-istanbul');
+    grunt.loadNpmTasks('grunt-coveralls');
 
     // githooks - Binds grunt tasks to git hooks
     grunt.registerTask('default', ['githooks', 'uglify']);
 
     grunt.registerTask('test', ['jshint', 'jslint', 'clean', 'uglify', 'qunit']);
 
-    grunt.registerTask('travis', ['jshint', 'jslint', 'clean', 'uglify', 'jsdoc', 'gh-pages:deploy']);
+    grunt.registerTask('travis', ['jshint', 'jslint', 'clean', 'uglify', 'jsdoc', 'gh-pages:deploy', 'coveralls']);
     
     grunt.registerTask('docs', ['clean', 'jsdoc']);
 };
