@@ -47,7 +47,7 @@ module.exports = function(grunt) {
             }
         },
         
-        clean: ['dest/'],
+        clean: ['dest/', 'test/report'],
         
         jsdoc : {
             dist : {
@@ -86,7 +86,22 @@ module.exports = function(grunt) {
                 },
                 src: ['**/*']
             }
-        }
+        },
+        
+        qunit: {
+            options: {
+                timeout: 30000,
+                "--web-security": "no",
+                coverage: {
+                    src: "dest/build/<%= pkg.name %>.min.js",
+                    instrumentedFiles: "test/report/temp/",
+                    htmlReport: "test/report/coverage",
+                    lcovReport: "test/report/lcov",
+                    linesThresholdPct: 70
+                }
+            },
+            all: ['test/**/*.html', '!test/report/**/*.html']
+        }        
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -96,11 +111,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-jsdoc');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-gh-pages');
+    grunt.loadNpmTasks('grunt-qunit-istanbul');
 
     // githooks - Binds grunt tasks to git hooks
     grunt.registerTask('default', ['githooks', 'uglify']);
 
-    grunt.registerTask('test', ['jshint', 'jslint']);
+    grunt.registerTask('test', ['jshint', 'jslint', 'clean', 'uglify', 'qunit']);
 
     grunt.registerTask('travis', ['jshint', 'jslint', 'clean', 'uglify', 'jsdoc', 'gh-pages:deploy']);
     

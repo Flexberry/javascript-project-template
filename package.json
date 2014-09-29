@@ -11,7 +11,9 @@
     "grunt-gh-pages": "^0.9.1",
     "grunt-githooks": "^0.3.1",
     "grunt-jsdoc": "^0.6.0",
-    "grunt-jslint": "^1.1.12"
+    "grunt-jslint": "^1.1.12",
+    "grunt-qunit-istanbul": "^0.4.5",
+    "qunitjs": "^1.15.0"
   },
   "scripts": {
     "test": "grunt travis --verbose"
