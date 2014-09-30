@@ -110,7 +110,27 @@ module.exports = function(grunt) {
             all: {
                 src: "test/report/lcov/lcov.info"
             }
-        }        
+        },
+        
+        "github-release": {
+            options: {
+                repository: 'Flexberry/testproj',
+                auth: {
+                    user: process.env.GH_TOKEN,
+                    password: ''
+                },
+                release: {
+                    tag_name: grunt.option('tag'), // If no specified then version field from package.json will be used.
+                    name: grunt.option('title'), // If no specified then tag_name will be used.
+                    body: grunt.option('desc'), // Description of release. If no specified then last commit comment will be used.
+                    draft: grunt.option('draft') || false, 
+                    prerelease: grunt.option('prerelease') || /rc$/.test(grunt.option('tag')) || false // Pre-release label. If tag_name ends with 'rc' (release candidate), then true.
+                }
+            },
+            files: {
+                //todo: src: ['dist.zip'] // Files that you want to attach to Release
+            }
+        }
     });
 
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -122,6 +142,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-gh-pages');
     grunt.loadNpmTasks('grunt-qunit-istanbul');
     grunt.loadNpmTasks('grunt-coveralls');
+    grunt.loadNpmTasks('grunt-github-releaser');
 
     // githooks - Binds grunt tasks to git hooks
     grunt.registerTask('default', ['githooks', 'uglify']);
@@ -131,4 +152,9 @@ module.exports = function(grunt) {
     grunt.registerTask('travis', ['jshint', 'jslint', 'clean', 'uglify', 'jsdoc', 'gh-pages:deploy', 'qunit', 'coveralls']);
     
     grunt.registerTask('docs', ['clean', 'jsdoc']);
+    
+    // Usage:    grunt release --tag=v1.0.0 --title="First release" --desc="Release description"
+    // or:       grunt release --tag=v1.0.1rc (auto title and description)
+    // or just:  grunt release (tag from package.json->version) 
+    grunt.registerTask('release', ['github-release']);
 };
