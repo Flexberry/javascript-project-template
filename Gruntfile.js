@@ -173,4 +173,17 @@ module.exports = function(grunt) {
     // or:       grunt release --tag=v1.0.1rc (auto title and description)
     // or just:  grunt release (tag from package.json->version) 
     grunt.registerTask('release', ['uglify', 'compress:release', 'github-release', 'clean:release']);
+    
+    grunt.registerTask('mycustomtask', 'My custom task.', function() {
+        // http://gruntjs.com/creating-tasks#custom-tasks
+        grunt.log.writeln('Currently running my custom task.');
+        
+        // grunt.task.run('bar', 'baz');
+        // Or:
+        // grunt.task.run(['bar', 'baz']);
+        
+        // Use task args (http://gruntjs.com/api/grunt.option):
+        // grunt mycustomtask --opt
+        // grunt.option('opt')
+    });
 };
