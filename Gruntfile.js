@@ -47,7 +47,11 @@ module.exports = function(grunt) {
             }
         },
         
-        clean: ['dest/', 'test/report/'],
+        clean: {
+            dest: ['dest/'],
+            tests: ['test/report/'],
+            release: ['build.zip']
+        },
         
         jsdoc : {
             dist : {
@@ -112,6 +116,17 @@ module.exports = function(grunt) {
             }
         },
         
+        compress: {
+            release: {
+                options: {
+                    archive: 'build.zip'
+                },
+                files: [
+                    { src: ['**'], dest: '', expand: true, cwd: 'dest/build/' }
+                ]
+            }
+        },
+        
         "github-release": {
             options: {
                 repository: 'Flexberry/testproj',
@@ -128,7 +143,7 @@ module.exports = function(grunt) {
                 }
             },
             files: {
-                //todo: src: ['dist.zip'] // Files that you want to attach to Release
+                src: ['build.zip'] // Files that you want to attach to Release
             }
         }
     });
@@ -143,6 +158,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-qunit-istanbul');
     grunt.loadNpmTasks('grunt-coveralls');
     grunt.loadNpmTasks('grunt-github-releaser');
+    grunt.loadNpmTasks('grunt-contrib-compress');
 
     // githooks - Binds grunt tasks to git hooks
     grunt.registerTask('default', ['githooks', 'uglify']);
@@ -156,5 +172,5 @@ module.exports = function(grunt) {
     // Usage:    grunt release --tag=v1.0.0 --title="First release" --desc="Release description"
     // or:       grunt release --tag=v1.0.1rc (auto title and description)
     // or just:  grunt release (tag from package.json->version) 
-    grunt.registerTask('release', ['github-release']);
+    grunt.registerTask('release', ['uglify', 'compress:release', 'github-release', 'clean:release']);
 };
