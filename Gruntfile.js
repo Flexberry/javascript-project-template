@@ -143,7 +143,7 @@ module.exports = function(grunt) {
                 }
             },
             files: {
-                src: ['build.zip'] // Files that you want to attach to Release
+                src: ['build.zip' /*, todo: build.min.zip with minified js and css */] // Files that you want to attach to Release
             }
         },
         
@@ -160,6 +160,17 @@ module.exports = function(grunt) {
             },
             
             release: {
+                options: {
+                    noCache: true,
+                    sourcemap: 'none',
+                    style: 'expanded'
+                },
+                files: {
+                    'dest/build/main.css': 'styles/main.scss'
+                }
+            },
+            
+            "release-min": {
                 options: {
                     noCache: true,
                     sourcemap: 'none',
@@ -186,18 +197,18 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-sass');
 
     // githooks - Binds grunt tasks to git hooks
-    grunt.registerTask('default', ['githooks', 'uglify', 'sass']);
+    grunt.registerTask('default', ['githooks', 'uglify', 'sass:dist']);
 
-    grunt.registerTask('test', ['jshint', 'jslint', 'clean', 'uglify', 'sass', 'qunit']);
+    grunt.registerTask('test', ['jshint', 'jslint', 'clean', 'uglify', 'sass:dist', 'qunit']);
 
-    grunt.registerTask('travis', ['jshint', 'jslint', 'clean', 'uglify', 'sass', 'jsdoc', 'gh-pages:deploy', 'qunit', 'coveralls']);
+    grunt.registerTask('travis', ['jshint', 'jslint', 'clean', 'uglify', 'sass:release', 'sass:release-min', 'jsdoc', 'gh-pages:deploy', 'qunit', 'coveralls']);
     
     grunt.registerTask('docs', ['clean', 'jsdoc']);
     
     // Usage:    grunt release --tag=v1.0.0 --title="First release" --desc="Release description"
     // or:       grunt release --tag=v1.0.1rc (auto title and description)
     // or just:  grunt release (tag from package.json->version) 
-    grunt.registerTask('release', [/*todo:concat(Flexberry.js - not minified),*/ 'uglify', 'sass', 'compress:release', 'github-release', 'clean:release']);
+    grunt.registerTask('release', 'clean:dest', [/*todo:concat(Flexberry.js - not minified),*/ 'uglify', 'sass:release', 'sass:release-min', 'compress:release', 'github-release', 'clean:release']);
     
     grunt.registerTask('mycustomtask', 'My custom task.', function() {
         // http://gruntjs.com/creating-tasks#custom-tasks
