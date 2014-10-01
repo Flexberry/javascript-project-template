@@ -4,3 +4,4 @@ node_modules
 dest
 test/report
 .coveralls.yml
+.sass-cache
