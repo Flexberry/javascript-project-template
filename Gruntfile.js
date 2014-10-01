@@ -8,7 +8,7 @@ module.exports = function(grunt) {
                 banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
             build: {
-                src: 'src/*.js',
+                src: 'src/*.js' /* todo: src should be "concatenated.js" */,
                 dest: 'dest/build/<%= pkg.name %>.min.js'
             }
         },
@@ -50,7 +50,7 @@ module.exports = function(grunt) {
         clean: {
             dest: ['dest/'],
             tests: ['test/report/'],
-            release: ['build.zip']
+            release: ['build.zip', 'build.min.zip']
         },
         
         jsdoc : {
@@ -122,7 +122,16 @@ module.exports = function(grunt) {
                     archive: 'build.zip'
                 },
                 files: [
-                    { src: ['**'], dest: '', expand: true, cwd: 'dest/build/' }
+                    { src: ['*.js', '*.css', '!*.min.js', '!*.min.css'], dest: '', expand: true, cwd: 'dest/build/' }
+                ]
+            },
+            
+            "release-min": {
+                options: {
+                    archive: 'build.min.zip'
+                },
+                files: [
+                    { src: ['*.min.js', '*.min.css'], dest: '', expand: true, cwd: 'dest/build/' }
                 ]
             }
         },
@@ -143,7 +152,7 @@ module.exports = function(grunt) {
                 }
             },
             files: {
-                src: ['build.zip' /*, todo: build.min.zip with minified js and css */] // Files that you want to attach to Release
+                src: ['build.zip', 'build.min.zip'] // Files that you want to attach to Release
             }
         },
         
@@ -197,7 +206,8 @@ module.exports = function(grunt) {
     // Usage:    grunt release --tag=v1.0.0 --title="First release" --desc="Release description"
     // or:       grunt release --tag=v1.0.1rc (auto title and description)
     // or just:  grunt release (tag from package.json->version) 
-    grunt.registerTask('release', 'clean:dest', [/*todo:concat(Flexberry.js - not minified),*/ 'uglify', 'sass:release', 'sass:release-min', 'compress:release', 'github-release', 'clean:release']);
+    // NOTE: for github-release task you need GH_TOKEN environment variable. Put once in cmd: SET GH_TOKEN=<YOUR GITHUB TOKEN>
+    grunt.registerTask('release', 'clean:dest', [/*todo:concat(Flexberry.js - not minified),*/ 'uglify', 'sass:release', 'sass:release-min', 'compress:release', 'compress:release-min', 'github-release', 'clean:release']);
     
     grunt.registerTask('mycustomtask', 'My custom task.', function() {
         // http://gruntjs.com/creating-tasks#custom-tasks
