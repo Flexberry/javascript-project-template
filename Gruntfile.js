@@ -101,10 +101,7 @@ module.exports = function(grunt) {
                 options: {
                     base: 'dest',
                     branch: 'gh-pages',
-                    message: util.format('auto deploy\n%s, %s, %s', 
-                                         process.env.TRAVIS_REPO_SLUG, 
-                                         process.env.TRAVIS_COMMIT, 
-                                         process.env.TRAVIS_COMMIT_MESSAGE),
+                    message: util.format('auto deploy\nReason: %s', process.env.TRAVIS_COMMIT || 'unknown'),
                     user: {
                         name: 'Flexberry',
                         email: 'mail@flexberry.net'
