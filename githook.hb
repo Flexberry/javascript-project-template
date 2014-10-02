@@ -43,6 +43,12 @@ BGCYAN='\033[46m'     #  ${BGCYAN}
 BGGRAY='\033[47m'     #  ${BGGRAY}
 BGDEF='\033[49m'      #  ${BGDEF}
 
+# Хук только для ветки master.
+BRANCH=`git rev-parse --abbrev-ref HEAD`
+if [ $BRANCH != "master" ]; then
+    exit 0
+fi
+
 echo -en "\n ${BGBLACK}${WHITE} Задача {{command}}{{#if task}} {{task}}{{/if}}{{#if args}} {{args}}{{/if}} проверит, все ли хорошо...${NORMAL} "
 OUTPUT=$(cd '{{gruntfileDirectory}}' && {{command}}{{#if task}} {{task}}{{/if}}{{#if args}} {{args}}{{/if}})
 EXITCODE=$?
