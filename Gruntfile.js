@@ -107,7 +107,7 @@ module.exports = function(grunt) {
                         email: 'mail@flexberry.net'
                     },
                     repo: 'https://' + process.env.GH_TOKEN + '@github.com/Flexberry/testproj.git',
-                    silent: true,
+                    silent: false,
                     add: true
                 },
                 src: ['**/*']
