@@ -101,7 +101,12 @@ module.exports = function(grunt) {
                 options: {
                     base: 'dest',
                     branch: 'gh-pages',
+                    
+                    // Travis environment variables можно посмотреть здесь:
+                    // https://github.com/travis-ci/travis-build/blob/master/lib/travis/build/data/env.rb
+                    // https://github.com/travis-ci/travis-build/blob/master/spec/shared/script.rb
                     message: util.format('auto deploy\nReason: %s', process.env.TRAVIS_COMMIT || 'unknown'),
+                    
                     user: {
                         name: 'Flexberry',
                         email: 'mail@flexberry.net'
