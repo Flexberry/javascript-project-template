@@ -107,7 +107,7 @@ module.exports = function(grunt) {
                         email: 'mail@flexberry.net'
                     },
                     repo: 'https://' + process.env.GH_TOKEN + '@github.com/Flexberry/testproj.git',
-                    silent: false,
+                    silent: true, // скрыть лог задачи, иначе github-токен будет выведен в логе билда Travis CI.
                     add: true
                 },
                 src: ['**/*']
