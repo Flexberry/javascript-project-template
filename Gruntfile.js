@@ -3,12 +3,28 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        uglify: {
+        
+        concat: {
             options: {
-                banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                separator: ';',
+                stripBanners: true,
+                banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+                        '<%= grunt.template.today("yyyy-mm-dd") %> */\n'
             },
             build: {
-                src: 'src/*.js' /* todo: src should be "concatenated.js" */,
+                src: ['src/*.js'],
+                dest: 'dest/build/<%= pkg.name %>.js'
+            }
+        },
+  
+        uglify: {
+            options: {
+                preserveComments: 'some',
+                banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
+                        '<%= grunt.template.today("yyyy-mm-dd") %> */\n'
+            },
+            build: {
+                src: ['src/*.js'],
                 dest: 'dest/build/<%= pkg.name %>.min.js'
             }
         },
@@ -164,7 +180,7 @@ module.exports = function(grunt) {
                     style: 'expanded'
                 },
                 files: {
-                    'dest/build/main.css': 'styles/main.scss'
+                    'dest/build/<%= pkg.name %>.css': 'styles/main.scss'
                 }
             },
             
@@ -175,7 +191,7 @@ module.exports = function(grunt) {
                     style: 'expanded'
                 },
                 files: {
-                    'dest/build/main.css': 'styles/main.scss'
+                    'dest/build/<%= pkg.name %>.css': 'styles/main.scss'
                 }
             },
             
@@ -186,7 +202,7 @@ module.exports = function(grunt) {
                     style: 'compressed'
                 },
                 files: {
-                    'dest/build/main.min.css': 'styles/main.scss'
+                    'dest/build/<%= pkg.name %>.min.css': 'styles/main.scss'
                 }
             }
         }
@@ -195,11 +211,11 @@ module.exports = function(grunt) {
     require('load-grunt-tasks')(grunt);
 
     // githooks - Binds grunt tasks to git hooks
-    grunt.registerTask('default', ['githooks', 'uglify', 'sass:dist']);
+    grunt.registerTask('default', ['githooks', 'concat', 'uglify', 'sass:dist']);
 
-    grunt.registerTask('test', ['jshint', 'jslint', 'clean', 'uglify', 'sass:dist', 'qunit']);
+    grunt.registerTask('test', ['jshint', 'jslint', 'clean', 'concat', 'uglify', 'sass:dist', 'qunit']);
 
-    grunt.registerTask('travis', ['jshint', 'jslint', 'clean', 'uglify', 'sass:release', 'sass:release-min', 'jsdoc', 'gh-pages:deploy', 'qunit', 'coveralls']);
+    grunt.registerTask('travis', ['jshint', 'jslint', 'clean', 'concat', 'uglify', 'sass:release', 'sass:release-min', 'jsdoc', 'gh-pages:deploy', 'qunit', 'coveralls']);
     
     grunt.registerTask('docs', ['clean', 'jsdoc']);
     
@@ -207,7 +223,7 @@ module.exports = function(grunt) {
     // or:       grunt release --tag=v1.0.1rc (auto title and description)
     // or just:  grunt release (tag from package.json->version) 
     // NOTE: for github-release task you need GH_TOKEN environment variable. Put once in cmd: SET GH_TOKEN=<YOUR GITHUB TOKEN>
-    grunt.registerTask('release', 'clean:dest', [/*todo:concat(Flexberry.js - not minified),*/ 'uglify', 'sass:release', 'sass:release-min', 'compress:release', 'compress:release-min', 'github-release', 'clean:release']);
+    grunt.registerTask('release', ['clean:dest', 'concat', 'uglify', 'sass:release', 'sass:release-min', 'compress:release', 'compress:release-min', 'github-release', 'clean:release']);
     
     grunt.registerTask('mycustomtask', 'My custom task.', function() {
         // http://gruntjs.com/creating-tasks#custom-tasks
