@@ -67,7 +67,7 @@ module.exports = function(grunt) {
         },
         
         clean: {
-            dest: ['dest/'],
+            dest: ['dest/build/', 'dest/docs/'],
             tests: ['test/report/'],
             release: ['build.zip', 'build.min.zip']
         },
@@ -77,7 +77,7 @@ module.exports = function(grunt) {
                 src: ['src/*.js'], 
                 options: {
                     configure: '.jsdocrc',
-                    destination: 'dest'
+                    destination: 'dest/docs'
                 }
             }
         },
@@ -91,7 +91,7 @@ module.exports = function(grunt) {
                     base: 'dest',
                     branch: 'gh-pages',
                     message: 'auto publish',
-                    add: false
+                    add: true
 				},
                 src: ['**/*']
             },
@@ -105,7 +105,8 @@ module.exports = function(grunt) {
                         email: 'mail@flexberry.net'
                     },
                     repo: 'https://' + process.env.GH_TOKEN + '@github.com/Flexberry/testproj.git',
-                    silent: true
+                    silent: true,
+                    add: true
                 },
                 src: ['**/*']
             }

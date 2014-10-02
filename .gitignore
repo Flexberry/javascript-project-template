@@ -1,7 +1,8 @@
 node_modules
 .idea
 .grunt
-dest
+dest/build
+dest/docs
 test/report
 .coveralls.yml
 .sass-cache
