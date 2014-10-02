@@ -1,5 +1,8 @@
 module.exports = function(grunt) {
 
+    require('time-grunt')(grunt);
+    require('load-grunt-tasks')(grunt);
+
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
@@ -207,9 +210,7 @@ module.exports = function(grunt) {
             }
         }
     });
-
-    require('load-grunt-tasks')(grunt);
-
+    
     // githooks - Binds grunt tasks to git hooks
     grunt.registerTask('default', ['githooks', 'concat', 'uglify', 'sass:dist']);
 

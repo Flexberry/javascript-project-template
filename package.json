@@ -19,7 +19,8 @@
     "grunt-jslint": "^1.1.12",
     "grunt-qunit-istanbul": "^0.4.5",
     "load-grunt-tasks": "^0.6.0",
-    "qunitjs": "^1.15.0"
+    "qunitjs": "^1.15.0",
+    "time-grunt": "0.2.10"
   },
   "scripts": {
     "test": "grunt travis --verbose"
