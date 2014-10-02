@@ -1,5 +1,7 @@
 module.exports = function(grunt) {
 
+    var util = require('util');
+
     require('time-grunt')(grunt);
     require('load-grunt-tasks')(grunt);
 
@@ -99,7 +101,10 @@ module.exports = function(grunt) {
                 options: {
                     base: 'dest',
                     branch: 'gh-pages',
-                    message: 'auto deploy',
+                    message: util.format('auto deploy\n%s, %s, %s', 
+                                         process.env.TRAVIS_REPO_SLUG, 
+                                         process.env.TRAVIS_COMMIT, 
+                                         process.env.TRAVIS_COMMIT_MESSAGE),
                     user: {
                         name: 'Flexberry',
                         email: 'mail@flexberry.net'
