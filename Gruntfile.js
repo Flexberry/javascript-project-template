@@ -9,6 +9,8 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
+        tmpDir: '.grunt/',
+
         buildName: '<%= pkg.name %>',
         buildDir: 'dest/build/',
         buildFileNameNoExt: '<%= buildDir %><%= buildName %>',
@@ -16,8 +18,8 @@ module.exports = function(grunt) {
         buildMinJsFilePath: '<%= buildFileNameNoExt %>.min.js',
         buildCssFilePath: '<%= buildFileNameNoExt %>.css',
         buildMinCssFilePath: '<%= buildFileNameNoExt %>.min.css',
-        buildArchiveFileName: 'build.zip',
-        buildMinArchiveFileName: 'build.min.zip',
+        buildArchiveFilePath: '<%= tmpDir %>release/build.zip',
+        buildMinArchiveFilePath: '<%= tmpDir %>release/build.min.zip',
 
         srcDir: 'src/',
         srcFilePaths: ['<%= srcDir %>*.js'],
@@ -92,9 +94,10 @@ module.exports = function(grunt) {
         },
         
         clean: {
-            dest: ['<%= buildDir %>', '<%= docsDir %>'],
+            build: ['<%= buildDir %>'],
+            docs: ['<%= docsDir %>'],
             tests: ['<%= testReportDir %>'],
-            release: ['<%= buildArchiveFileName %>', '<%= buildMinArchiveFileName %>']
+            release: ['<%= buildArchiveFilePath %>', '<%= buildMinArchiveFilePath %>']
         },
         
         jsdoc : {
@@ -169,7 +172,7 @@ module.exports = function(grunt) {
         compress: {
             release: {
                 options: {
-                    archive: '<%= buildArchiveFileName %>'
+                    archive: '<%= buildArchiveFilePath %>'
                 },
                 files: [
                     { src: ['*.js', '*.css', '!*.min.js', '!*.min.css'], dest: '', expand: true, cwd: '<%= buildDir %>' }
@@ -178,7 +181,7 @@ module.exports = function(grunt) {
             
             'release-min': {
                 options: {
-                    archive: '<%= buildMinArchiveFileName %>'
+                    archive: '<%= buildMinArchiveFilePath %>'
                 },
                 files: [
                     { src: ['*.min.js', '*.min.css'], dest: '', expand: true, cwd: '<%= buildDir %>' }
@@ -202,7 +205,7 @@ module.exports = function(grunt) {
                 }
             },
             files: {
-                src: ['<%= buildArchiveFileName %>', '<%= buildMinArchiveFileName %>'] // Files that you want to attach to Release
+                src: ['<%= buildArchiveFilePath %>', '<%= buildMinArchiveFilePath %>'] // Files that you want to attach to Release
             }
         },
         
@@ -241,22 +244,37 @@ module.exports = function(grunt) {
             }
         }
     });
-    
-    // githooks - Binds grunt tasks to git hooks
-    grunt.registerTask('default', ['githooks', 'concat', 'uglify', 'sass:dist']);
 
-    grunt.registerTask('test', ['jshint', 'jslint', 'clean', 'concat', 'uglify', 'sass:dist', 'qunit']);
+    grunt.registerTask('init', ['githooks']);
 
-    grunt.registerTask('travis', ['jshint', 'jslint', 'clean', 'concat', 'uglify', 'sass:release', 'sass:release-min', 'jsdoc', 'gh-pages:deploy', 'qunit', 'coveralls']);
-    
-    grunt.registerTask('docs', ['clean', 'jsdoc']);
-    
-    // Usage:    grunt release --tag=v1.0.0 --title="First release" --desc="Release description"
-    // or:       grunt release --tag=v1.0.1rc (auto title and description)
-    // or just:  grunt release (tag from package.json->version) 
-    // NOTE: for github-release task you need GH_TOKEN environment variable. Put once in cmd: SET GH_TOKEN=<YOUR GITHUB TOKEN>
-    grunt.registerTask('release', ['clean:dest', 'concat', 'uglify', 'sass:release', 'sass:release-min', 'compress:release', 'compress:release-min', 'github-release', 'clean:release']);
-    
+    grunt.registerTask('default', ['clean', 'test', 'docs', 'release-local']);
+
+    grunt.registerTask('check', ['jshint', 'jslint']);
+    grunt.registerTask('test', ['check', 'clean:tests', 'build-debug', 'qunit']);
+
+    grunt.registerTask('build', ['build-debug']);
+    grunt.registerTask('build-debug', ['clean:build', 'concat', 'uglify', 'sass:dist']); // build with MAP files
+    grunt.registerTask('build-release', ['clean:build', 'concat', 'uglify', 'sass:release', 'sass:release-min']); // build without MAP files
+
+    grunt.registerTask('docs', ['clean:docs', 'jsdoc']);
+
+    /* Usage:    grunt release --tag=v1.0.0 --title="First release" --desc="Release description"
+     * or:       grunt release --tag=v1.0.1rc (auto title and description)
+     * or just:  grunt release (tag from package.json->version)
+     * NOTE: for github-release task you need GH_TOKEN environment variable. Put once in cmd: SET GH_TOKEN=<YOUR GITHUB TOKEN>
+     */
+    grunt.registerTask('release', ['release-local', 'github-release', 'clean:release']);
+    grunt.registerTask('release-local', ['clean:release', 'build-release', 'compress:release', 'compress:release-min']);
+
+    grunt.registerTask('publish', ['check', 'build-release', 'docs', 'gh-pages:publish']);
+
+    grunt.registerTask('travis', 'Travis CI build task', function () {
+        if (process.env.TRAVIS_REPO_SLUG == null && !grunt.option('force'))
+            throw new Error('Task "travis" is not intended to execute in the environment other than Travis CI.');
+
+        grunt.task.run(['check', 'build-release', 'docs', 'gh-pages:deploy', 'qunit', 'coveralls']);
+    });
+
     grunt.registerTask('mycustomtask', 'My custom task.', function() {
         // http://gruntjs.com/creating-tasks#custom-tasks
         grunt.log.writeln('Currently running my custom task.');
