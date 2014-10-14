@@ -8,29 +8,52 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        
+
+        buildName: '<%= pkg.name %>',
+        buildDir: 'dest/build/',
+        buildFileNameNoExt: '<%= buildDir %><%= buildName %>',
+        buildJsFilePath: '<%= buildFileNameNoExt %>.js',
+        buildMinJsFilePath: '<%= buildFileNameNoExt %>.min.js',
+        buildCssFilePath: '<%= buildFileNameNoExt %>.css',
+        buildMinCssFilePath: '<%= buildFileNameNoExt %>.min.css',
+        buildArchiveFileName: 'build.zip',
+        buildMinArchiveFileName: 'build.min.zip',
+
+        srcDir: 'src/',
+        srcFilePaths: ['<%= srcDir %>*.js'],
+        srcMainStyleFilePath: 'styles/main.scss',
+
+        testDir: 'test/',
+        testReportDir: '<%= testDir %>report/',
+        testFilePaths: ['<%= testDir %>**/*.html', '!<%= testReportDir %>**/*.html'],
+        testHtmlReportDir: '<%= testReportDir %>coverage/',
+        testLcovReportDir: '<%= testReportDir %>lcov/',
+
+        docsDir: 'dest/docs/',
+
+        banner: '/*! <%= buildName %> - v<%= pkg.version %> - ' +
+                '<%= grunt.template.today("yyyy-mm-dd") %> */\n',
+
         concat: {
             options: {
                 separator: ';',
                 stripBanners: true,
-                banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-                        '<%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                banner: '<%= banner %>'
             },
             build: {
-                src: ['src/*.js'],
-                dest: 'dest/build/<%= pkg.name %>.js'
+                src: ['<%= srcFilePaths %>'],
+                dest: '<%= buildJsFilePath %>'
             }
         },
   
         uglify: {
             options: {
                 preserveComments: 'some',
-                banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
-                        '<%= grunt.template.today("yyyy-mm-dd") %> */\n'
+                banner: '<%= banner %>'
             },
             build: {
-                src: ['src/*.js'],
-                dest: 'dest/build/<%= pkg.name %>.min.js'
+                src: ['<%= srcFilePaths %>'],
+                dest: '<%= buildMinJsFilePath %>'
             }
         },
 
@@ -48,7 +71,7 @@ module.exports = function(grunt) {
         },
 
         jshint: {
-            files: ['src/*.js'],
+            files: ['<%= srcFilePaths %>'],
             options: {
                 jshintrc: true
             }
@@ -56,7 +79,7 @@ module.exports = function(grunt) {
 
         jslint: {
             all: {
-                src: ['src/*.js'],
+                src: ['<%= srcFilePaths %>'],
                 options: {
                     errorsOnly: false,
                     failOnError: true
@@ -69,17 +92,17 @@ module.exports = function(grunt) {
         },
         
         clean: {
-            dest: ['dest/build/', 'dest/docs/'],
-            tests: ['test/report/'],
-            release: ['build.zip', 'build.min.zip']
+            dest: ['<%= buildDir %>', '<%= docsDir %>'],
+            tests: ['<%= testReportDir %>'],
+            release: ['<%= buildArchiveFileName %>', '<%= buildMinArchiveFileName %>']
         },
         
         jsdoc : {
             dist : {
-                src: ['src/*.js'], 
+                src: ['<%= srcFilePaths %>'],
                 options: {
                     configure: '.jsdocrc',
-                    destination: 'dest/docs'
+                    destination: '<%= docsDir %>'
                 }
             }
         },
@@ -94,14 +117,14 @@ module.exports = function(grunt) {
                     branch: 'gh-pages',
                     message: 'auto publish',
                     add: true
-				},
+                },
                 src: ['**/*']
             },
             deploy: {
                 options: {
                     base: 'dest',
                     branch: 'gh-pages',
-                    
+
                     // Travis environment variables можно посмотреть здесь:
                     // https://github.com/travis-ci/travis-build/blob/master/lib/travis/build/data/env.rb
                     // https://github.com/travis-ci/travis-build/blob/master/spec/shared/script.rb
@@ -122,16 +145,16 @@ module.exports = function(grunt) {
         qunit: {
             options: {
                 timeout: 30000,
-                "--web-security": "no",
+                '--web-security': 'no',
                 coverage: {
-                    src: "dest/build/<%= pkg.name %>.min.js",
-                    instrumentedFiles: "test/report/temp/",
-                    htmlReport: "test/report/coverage",
-                    lcovReport: "test/report/lcov",
+                    src: '<%= buildMinJsFilePath %>',
+                    instrumentedFiles: '<%= testReportDir %>temp/',
+                    htmlReport: '<%= testHtmlReportDir %>',
+                    lcovReport: '<%= testLcovReportDir %>',
                     linesThresholdPct: 70
                 }
             },
-            all: ['test/**/*.html', '!test/report/**/*.html']
+            all: ['<%= testFilePaths %>']
         },
         
         coveralls: {
@@ -139,31 +162,31 @@ module.exports = function(grunt) {
                 force: true
             },
             all: {
-                src: "test/report/lcov/lcov.info"
+                src: '<%= testLcovReportDir %>lcov.info'
             }
         },
         
         compress: {
             release: {
                 options: {
-                    archive: 'build.zip'
+                    archive: '<%= buildArchiveFileName %>'
                 },
                 files: [
-                    { src: ['*.js', '*.css', '!*.min.js', '!*.min.css'], dest: '', expand: true, cwd: 'dest/build/' }
+                    { src: ['*.js', '*.css', '!*.min.js', '!*.min.css'], dest: '', expand: true, cwd: '<%= buildDir %>' }
                 ]
             },
             
-            "release-min": {
+            'release-min': {
                 options: {
-                    archive: 'build.min.zip'
+                    archive: '<%= buildMinArchiveFileName %>'
                 },
                 files: [
-                    { src: ['*.min.js', '*.min.css'], dest: '', expand: true, cwd: 'dest/build/' }
+                    { src: ['*.min.js', '*.min.css'], dest: '', expand: true, cwd: '<%= buildDir %>' }
                 ]
             }
         },
         
-        "github-release": {
+        'github-release': {
             options: {
                 repository: 'Flexberry/testproj',
                 auth: {
@@ -179,7 +202,7 @@ module.exports = function(grunt) {
                 }
             },
             files: {
-                src: ['build.zip', 'build.min.zip'] // Files that you want to attach to Release
+                src: ['<%= buildArchiveFileName %>', '<%= buildMinArchiveFileName %>'] // Files that you want to attach to Release
             }
         },
         
@@ -191,7 +214,7 @@ module.exports = function(grunt) {
                     style: 'expanded'
                 },
                 files: {
-                    'dest/build/<%= pkg.name %>.css': 'styles/main.scss'
+                    '<%= buildCssFilePath %>': '<%= srcMainStyleFilePath %>'
                 }
             },
             
@@ -202,18 +225,18 @@ module.exports = function(grunt) {
                     style: 'expanded'
                 },
                 files: {
-                    'dest/build/<%= pkg.name %>.css': 'styles/main.scss'
+                    '<%=buildCssFilePath %>': '<%= srcMainStyleFilePath %>'
                 }
             },
             
-            "release-min": {
+            'release-min': {
                 options: {
                     noCache: true,
                     sourcemap: 'none',
                     style: 'compressed'
                 },
                 files: {
-                    'dest/build/<%= pkg.name %>.min.css': 'styles/main.scss'
+                    '<%= buildMinCssFilePath %>': '<%= srcMainStyleFilePath %>'
                 }
             }
         }
