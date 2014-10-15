@@ -22,9 +22,11 @@ module.exports = function(grunt) {
         buildArchiveFilePath: '<%= tmpDir %>release/build.zip',
         buildMinArchiveFilePath: '<%= tmpDir %>release/build.min.zip',
 
-        srcDir: 'src/',
-        srcFilePaths: ['<%= srcDir %>*.js'],
-        srcMainStyleFilePath: 'styles/main.scss',
+        srcScriptDir: 'src/',
+        srcStyleDir: 'styles/',
+        srcScriptFilePaths: ['<%= srcScriptDir %>*.js'],
+        srcStyleFilePaths: ['<%= srcStyleDir %>*.scss'],
+        srcMainStyleFilePath: '<%= srcStyleDir %>main.scss',
 
         testDir: 'test/',
         testReportDir: '<%= testDir %>report/',
@@ -44,18 +46,18 @@ module.exports = function(grunt) {
                 banner: '<%= banner %>'
             },
             build: {
-                src: ['<%= srcFilePaths %>'],
+                src: ['<%= srcScriptFilePaths %>'],
                 dest: '<%= buildJsFilePath %>'
             }
         },
-  
+
         uglify: {
             options: {
                 preserveComments: 'some',
                 banner: '<%= banner %>'
             },
             build: {
-                src: ['<%= srcFilePaths %>'],
+                src: ['<%= srcScriptFilePaths %>'],
                 dest: '<%= buildMinJsFilePath %>'
             }
         },
@@ -78,7 +80,44 @@ module.exports = function(grunt) {
                 jshintrc: true
             },
             gruntfile: ['Gruntfile.js'],
-            src: ['<%= srcFilePaths %>']
+            src: ['<%= srcScriptFilePaths %>']
+        },
+
+        lintspaces: {
+            options: {
+                editorconfig: '.editorconfig',
+                showCodes: true,
+                showTypes: true,
+                showValid: true
+            },
+            gruntfile: {
+                src: ['Gruntfile.js'],
+                options: {
+                    ignores: ['js-comments']
+                }
+            },
+            scripts: {
+                src: ['<%= srcScriptFilePaths %>'],
+                options: {
+                    ignores: ['js-comments']
+                }
+            },
+            styles: {
+                src: ['<%= srcStyleFilePaths %>'],
+                options: {
+                }
+            },
+            tests: {
+                src: ['<%= testFilePaths %>'],
+                options: {
+                    ignores: ['html-comments']
+                }
+            },
+            configs: {
+                src: ['.*.yml', '.*rc', 'githook.hb'],
+                options: {
+                }
+            }
         },
 
         clean: {
@@ -87,17 +126,17 @@ module.exports = function(grunt) {
             tests: ['<%= testReportDir %>'],
             release: ['<%= buildArchiveFilePath %>', '<%= buildMinArchiveFilePath %>']
         },
-        
+
         jsdoc : {
             dist : {
-                src: ['<%= srcFilePaths %>'],
+                src: ['<%= srcScriptFilePaths %>'],
                 options: {
                     configure: '.jsdocrc',
                     destination: '<%= docsDir %>'
                 }
             }
         },
-        
+
         'gh-pages': {
             options: {
                 git: 'git'
@@ -120,7 +159,7 @@ module.exports = function(grunt) {
                     // https://github.com/travis-ci/travis-build/blob/master/lib/travis/build/data/env.rb
                     // https://github.com/travis-ci/travis-build/blob/master/spec/shared/script.rb
                     message: util.format('auto deploy\nReason: %s', process.env.TRAVIS_COMMIT || 'unknown'),
-                    
+
                     user: {
                         name: 'Flexberry',
                         email: 'mail@flexberry.net'
@@ -132,7 +171,7 @@ module.exports = function(grunt) {
                 src: ['**/*']
             }
         },
-        
+
         qunit: {
             options: {
                 timeout: 30000,
@@ -147,7 +186,7 @@ module.exports = function(grunt) {
             },
             all: ['<%= testFilePaths %>']
         },
-        
+
         coveralls: {
             options: {
                 force: true
@@ -156,7 +195,7 @@ module.exports = function(grunt) {
                 src: '<%= testLcovReportDir %>lcov.info'
             }
         },
-        
+
         compress: {
             release: {
                 options: {
@@ -166,7 +205,7 @@ module.exports = function(grunt) {
                     { src: ['*.js', '*.css', '!*.min.js', '!*.min.css'], dest: '', expand: true, cwd: '<%= buildDir %>' }
                 ]
             },
-            
+
             'release-min': {
                 options: {
                     archive: '<%= buildMinArchiveFilePath %>'
@@ -176,7 +215,7 @@ module.exports = function(grunt) {
                 ]
             }
         },
-        
+
         'github-release': {
             options: {
                 repository: 'Flexberry/testproj',
@@ -188,7 +227,7 @@ module.exports = function(grunt) {
                     tag_name: grunt.option('tag'), // If no specified then version field from package.json will be used.
                     name: grunt.option('title'), // If no specified then tag_name will be used.
                     body: grunt.option('desc'), // Description of release. If no specified then last commit comment will be used.
-                    draft: grunt.option('draft') || false, 
+                    draft: grunt.option('draft') || false,
                     prerelease: grunt.option('prerelease') || /rc$/.test(grunt.option('tag')) || false // Pre-release label. If tag_name ends with 'rc' (release candidate), then true.
                 }
             },
@@ -196,7 +235,7 @@ module.exports = function(grunt) {
                 src: ['<%= buildArchiveFilePath %>', '<%= buildMinArchiveFilePath %>'] // Files that you want to attach to Release
             }
         },
-        
+
         sass: {
             dist: {
                 options: {
@@ -208,7 +247,7 @@ module.exports = function(grunt) {
                     '<%= buildCssFilePath %>': '<%= srcMainStyleFilePath %>'
                 }
             },
-            
+
             release: {
                 options: {
                     noCache: true,
@@ -219,7 +258,7 @@ module.exports = function(grunt) {
                     '<%=buildCssFilePath %>': '<%= srcMainStyleFilePath %>'
                 }
             },
-            
+
             'release-min': {
                 options: {
                     noCache: true,
@@ -237,7 +276,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', ['clean', 'test', 'docs', 'release-local']);
 
-    grunt.registerTask('check', ['jshint']);
+    grunt.registerTask('check', ['lintspaces', 'jshint']);
     grunt.registerTask('test', ['check', 'clean:tests', 'build-debug', 'qunit']);
 
     grunt.registerTask('build', ['build-debug']);
@@ -267,11 +306,11 @@ module.exports = function(grunt) {
     grunt.registerTask('mycustomtask', 'My custom task.', function() {
         // http://gruntjs.com/creating-tasks#custom-tasks
         grunt.log.writeln('Currently running my custom task.');
-        
+
         // grunt.task.run('bar', 'baz');
         // Or:
         // grunt.task.run(['bar', 'baz']);
-        
+
         // Use task args (http://gruntjs.com/api/grunt.option):
         // grunt mycustomtask --opt
         // grunt.option('opt')

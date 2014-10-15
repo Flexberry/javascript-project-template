@@ -11,7 +11,7 @@ NINVERSE='\033[7m'     #  ${NINVERSE}    # отменить реверсию
 BREAK='\033[m'       #  ${BREAK}    # все атрибуты по умолчанию
 NORMAL='\033[0m'      #  ${NORMAL}    # все атрибуты по умолчанию
 
-# Цвет текста: 
+# Цвет текста:
 BLACK='\033[0;30m'     #  ${BLACK}    # чёрный цвет знаков
 RED='\033[0;31m'       #  ${RED}      # красный цвет знаков
 GREEN='\033[0;32m'     #  ${GREEN}    # зелёный цвет знаков
@@ -32,7 +32,7 @@ LMAGENTA='\033[1;35m'   #  ${LMAGENTA}
 LCYAN='\033[1;36m'     #  ${LCYAN}
 WHITE='\033[1;37m'     #  ${WHITE}
 
-# Цвет фона 
+# Цвет фона
 BGBLACK='\033[40m'     #  ${BGBLACK}
 BGRED='\033[41m'       #  ${BGRED}
 BGGREEN='\033[42m'     #  ${BGGREEN}
@@ -54,12 +54,12 @@ OUTPUT=$(cd '{{gruntfileDirectory}}' && {{command}}{{#if task}} {{task}}{{/if}}{
 EXITCODE=$?
 
 if [ $EXITCODE -eq 0 ]; then
-	echo -en "${BGGREEN}${WHITE} OK ${NORMAL} \n\n"
+    echo -en "${BGGREEN}${WHITE} OK ${NORMAL} \n\n"
 else
-	echo -en "${BGRED}${WHITE} {{#if preventExit}}IGNORE{{else}}ABORT{{/if}} ${NORMAL} \n\n"
-	echo "$OUTPUT"
+    echo -en "${BGRED}${WHITE} {{#if preventExit}}IGNORE{{else}}ABORT{{/if}} ${NORMAL} \n\n"
+    echo "$OUTPUT"
 fi
-	
+
 {{#unless preventExit}}
 exit $EXITCODE
 {{/unless}}
