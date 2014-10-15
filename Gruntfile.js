@@ -1,4 +1,5 @@
 module.exports = function(grunt) {
+    'use strict';
 
     var util = require('util');
 
@@ -73,26 +74,13 @@ module.exports = function(grunt) {
         },
 
         jshint: {
-            files: ['<%= srcFilePaths %>'],
             options: {
                 jshintrc: true
-            }
+            },
+            gruntfile: ['Gruntfile.js'],
+            src: ['<%= srcFilePaths %>']
         },
 
-        jslint: {
-            all: {
-                src: ['<%= srcFilePaths %>'],
-                options: {
-                    errorsOnly: false,
-                    failOnError: true
-                },
-                directives: {
-                    white: false,
-                    devel: true
-                }
-            }
-        },
-        
         clean: {
             build: ['<%= buildDir %>'],
             docs: ['<%= docsDir %>'],
@@ -112,7 +100,7 @@ module.exports = function(grunt) {
         
         'gh-pages': {
             options: {
-              git: 'git'
+                git: 'git'
             },
             publish: {
                 options: {
@@ -249,7 +237,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', ['clean', 'test', 'docs', 'release-local']);
 
-    grunt.registerTask('check', ['jshint', 'jslint']);
+    grunt.registerTask('check', ['jshint']);
     grunt.registerTask('test', ['check', 'clean:tests', 'build-debug', 'qunit']);
 
     grunt.registerTask('build', ['build-debug']);
@@ -269,8 +257,9 @@ module.exports = function(grunt) {
     grunt.registerTask('publish', ['check', 'build-release', 'docs', 'gh-pages:publish']);
 
     grunt.registerTask('travis', 'Travis CI build task', function () {
-        if (process.env.TRAVIS_REPO_SLUG == null && !grunt.option('force'))
-            throw new Error('Task "travis" is not intended to execute in the environment other than Travis CI.');
+        if (process.env.TRAVIS_REPO_SLUG === undefined && !grunt.option('pleaserun')) {
+            throw new Error('Task "travis" is not intended to execute in the environment other than Travis CI. Use --pleaserun to run anyway.');
+        }
 
         grunt.task.run(['check', 'build-release', 'docs', 'gh-pages:deploy', 'qunit', 'coveralls']);
     });
