@@ -269,6 +269,20 @@ module.exports = function(grunt) {
                     '<%= buildMinCssFilePath %>': '<%= srcMainStyleFilePath %>'
                 }
             }
+        },
+
+        watch: {
+            gruntfile: {
+                files: ['Gruntfile.js']
+            },
+            scripts: {
+                files: ['<%= srcScriptFilePaths %>'],
+                tasks: ['concat', 'uglify']
+            },
+            styles: {
+                files: ['<%= srcStyleFilePaths %>'],
+                tasks: ['sass:dist']
+            }
         }
     });
 
