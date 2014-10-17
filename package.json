@@ -16,6 +16,7 @@
     "grunt-gh-pages": "^0.9.1",
     "grunt-githooks": "^0.3.1",
     "grunt-github-releaser": "^0.1.17",
+    "grunt-jscs": "^0.8.0",
     "grunt-jsdoc": "^0.6.0",
     "grunt-lintspaces": "^0.6.0",
     "grunt-newer": "^0.7.0",

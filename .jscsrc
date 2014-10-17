@@ -1,0 +1,7 @@
+{
+    "preset": "airbnb",
+
+    "validateIndentation": 4,
+    "validateLineBreaks": "CRLF",
+    "safeContextKeyword": ["_this", "self"]
+}

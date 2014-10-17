@@ -75,19 +75,6 @@ module.exports = function(grunt) {
             }
         },
 
-        jshint: {
-            options: {
-                jshintrc: true
-            },
-            // Please, take into account the state of the bug https://github.com/tschaub/grunt-newer/issues/39. TODO: Remove this warning when the issue will be closed.
-            gruntfile: {
-                src: ['Gruntfile.js']
-            },
-            scripts: {
-                src: ['<%= srcScriptFilePaths %>']
-            }
-        },
-
         lintspaces: {
             options: {
                 editorconfig: '.editorconfig',
@@ -122,6 +109,32 @@ module.exports = function(grunt) {
                 src: ['.*.yml', '.*rc', 'githook.hb'],
                 options: {
                 }
+            }
+        },
+
+        jscs: {
+            options: {
+                config: true
+            },
+            // Please, take into account https://github.com/tschaub/grunt-newer/issues/39. TODO: Remove this warning when the issue will be closed.
+            gruntfile: {
+                src: ['Gruntfile.js']
+            },
+            scripts: {
+                src: ['<%= srcScriptFilePaths %>']
+            }
+        },
+
+        jshint: {
+            options: {
+                jshintrc: true
+            },
+            // Please, take into account https://github.com/tschaub/grunt-newer/issues/39. TODO: Remove this warning when the issue will be closed.
+            gruntfile: {
+                src: ['Gruntfile.js']
+            },
+            scripts: {
+                src: ['<%= srcScriptFilePaths %>']
             }
         },
 
@@ -229,6 +242,7 @@ module.exports = function(grunt) {
                     password: ''
                 },
                 release: {
+                    // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
                     tag_name: grunt.option('tag'), // If no specified then version field from package.json will be used.
                     name: grunt.option('title'), // If no specified then tag_name will be used.
                     body: grunt.option('desc'), // Description of release. If no specified then last commit comment will be used.
@@ -295,8 +309,8 @@ module.exports = function(grunt) {
 
     grunt.registerTask('default', ['clean', 'test', 'docs', 'release-local']);
 
-    grunt.registerTask('check', ['lintspaces', 'jshint']);
-    grunt.registerTask('check-new', ['newer:lintspaces', 'newer:jshint']);
+    grunt.registerTask('check', ['lintspaces', 'jscs', 'jshint']);
+    grunt.registerTask('check-new', ['newer:lintspaces', 'newer:jscs', 'newer:jshint']);
     grunt.registerTask('test', ['check', 'clean:tests', 'build-debug', 'qunit']);
 
     grunt.registerTask('build', ['build-debug']);
@@ -315,7 +329,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('publish', ['check', 'build-release', 'docs', 'gh-pages:publish']);
 
-    grunt.registerTask('travis', 'Travis CI build task', function () {
+    grunt.registerTask('travis', 'Travis CI build task', function() {
         if (process.env.TRAVIS_REPO_SLUG === undefined && !grunt.option('pleaserun')) {
             throw new Error('Task "travis" is not intended to execute in the environment other than Travis CI. Use --pleaserun to run anyway.');
         }
