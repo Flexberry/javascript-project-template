@@ -64,7 +64,7 @@ module.exports = function(grunt) {
 
         githooks: {
             all: {
-                'pre-commit': 'test',
+                'pre-commit': 'check',
                 options: {
                     hashbang: '#!/bin/sh',
                     template: 'githook.hb',
