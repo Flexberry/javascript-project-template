@@ -79,8 +79,13 @@ module.exports = function(grunt) {
             options: {
                 jshintrc: true
             },
-            gruntfile: ['Gruntfile.js'],
-            src: ['<%= srcScriptFilePaths %>']
+            // Please, take into account the state of the bug https://github.com/tschaub/grunt-newer/issues/39. TODO: Remove this warning when the issue will be closed.
+            gruntfile: {
+                src: ['Gruntfile.js']
+            },
+            scripts: {
+                src: ['<%= srcScriptFilePaths %>']
+            }
         },
 
         lintspaces: {
@@ -291,6 +296,7 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['clean', 'test', 'docs', 'release-local']);
 
     grunt.registerTask('check', ['lintspaces', 'jshint']);
+    grunt.registerTask('check-new', ['newer:lintspaces', 'newer:jshint']);
     grunt.registerTask('test', ['check', 'clean:tests', 'build-debug', 'qunit']);
 
     grunt.registerTask('build', ['build-debug']);
