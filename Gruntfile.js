@@ -132,8 +132,8 @@ module.exports = function(grunt) {
             release: ['<%= buildArchiveFilePath %>', '<%= buildMinArchiveFilePath %>']
         },
 
-        jsdoc : {
-            dist : {
+        jsdoc: {
+            dist: {
                 src: ['<%= srcScriptFilePaths %>'],
                 options: {
                     configure: '.jsdocrc',
