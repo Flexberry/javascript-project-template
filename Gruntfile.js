@@ -116,7 +116,9 @@ module.exports = function(grunt) {
             options: {
                 config: true
             },
-            // Please, take into account https://github.com/tschaub/grunt-newer/issues/39. TODO: Remove this warning when the issue will be closed.
+
+            /* Please, take into account https://github.com/tschaub/grunt-newer/issues/39.
+               TODO: Remove this warning when the issue will be closed. */
             gruntfile: {
                 src: ['Gruntfile.js']
             },
@@ -129,7 +131,9 @@ module.exports = function(grunt) {
             options: {
                 jshintrc: true
             },
-            // Please, take into account https://github.com/tschaub/grunt-newer/issues/39. TODO: Remove this warning when the issue will be closed.
+
+            /* Please, take into account https://github.com/tschaub/grunt-newer/issues/39.
+             TODO: Remove this warning when the issue will be closed. */
             gruntfile: {
                 src: ['Gruntfile.js']
             },
@@ -220,7 +224,12 @@ module.exports = function(grunt) {
                     archive: '<%= buildArchiveFilePath %>'
                 },
                 files: [
-                    { src: ['*.js', '*.css', '!*.min.js', '!*.min.css'], dest: '', expand: true, cwd: '<%= buildDir %>' }
+                    {
+                        src: ['*.js', '*.css', '!*.min.js', '!*.min.css'],
+                        dest: '',
+                        expand: true,
+                        cwd: '<%= buildDir %>'
+                    }
                 ]
             },
 
@@ -229,7 +238,12 @@ module.exports = function(grunt) {
                     archive: '<%= buildMinArchiveFilePath %>'
                 },
                 files: [
-                    { src: ['*.min.js', '*.min.css'], dest: '', expand: true, cwd: '<%= buildDir %>' }
+                    {
+                        src: ['*.min.js', '*.min.css'],
+                        dest: '',
+                        expand: true,
+                        cwd: '<%= buildDir %>'
+                    }
                 ]
             }
         },
@@ -243,15 +257,26 @@ module.exports = function(grunt) {
                 },
                 release: {
                     // jscs:disable requireCamelCaseOrUpperCaseIdentifiers
-                    tag_name: grunt.option('tag'), // If no specified then version field from package.json will be used.
-                    name: grunt.option('title'), // If no specified then tag_name will be used.
-                    body: grunt.option('desc'), // Description of release. If no specified then last commit comment will be used.
+                    // jshint camelcase:false
+                    // If no specified then version field from package.json will be used.
+                    tag_name: grunt.option('tag'),
+
+                    // If no specified then tag_name will be used.
+                    name: grunt.option('title'),
+
+                    // Description of release. If no specified then last commit comment will be used.
+                    body: grunt.option('desc'),
+
+                    // true to create a draft (unpublished) release, false to create a published one.
                     draft: grunt.option('draft') || false,
-                    prerelease: grunt.option('prerelease') || /rc$/.test(grunt.option('tag')) || false // Pre-release label. If tag_name ends with 'rc' (release candidate), then true.
+
+                    // Pre-release label. If tag_name ends with 'rc' (release candidate), then true.
+                    prerelease: grunt.option('prerelease') || /rc$/.test(grunt.option('tag')) || false
                 }
             },
             files: {
-                src: ['<%= buildArchiveFilePath %>', '<%= buildMinArchiveFilePath %>'] // Files that you want to attach to Release
+                // Files that you want to attach to Release
+                src: ['<%= buildArchiveFilePath %>', '<%= buildMinArchiveFilePath %>']
             }
         },
 
@@ -314,15 +339,21 @@ module.exports = function(grunt) {
     grunt.registerTask('test', ['check', 'clean:tests', 'build-debug', 'qunit']);
 
     grunt.registerTask('build', ['build-debug']);
-    grunt.registerTask('build-debug', ['clean:build', 'concat', 'uglify', 'sass:dist']); // build with MAP files
-    grunt.registerTask('build-release', ['clean:build', 'concat', 'uglify', 'sass:release', 'sass:release-min']); // build without MAP files
+
+    // build with MAP files
+    grunt.registerTask('build-debug', ['clean:build', 'concat', 'uglify', 'sass:dist']);
+
+    // build without MAP files
+    grunt.registerTask('build-release', ['clean:build', 'concat', 'uglify', 'sass:release', 'sass:release-min']);
 
     grunt.registerTask('docs', ['clean:docs', 'jsdoc']);
 
     /* Usage:    grunt release --tag=v1.0.0 --title="First release" --desc="Release description"
      * or:       grunt release --tag=v1.0.1rc (auto title and description)
      * or just:  grunt release (tag from package.json->version)
-     * NOTE: for github-release task you need GH_TOKEN environment variable. Put once in cmd: SET GH_TOKEN=<YOUR GITHUB TOKEN>
+     *
+     * NOTE: for github-release task you need GH_TOKEN environment variable.
+     *       Put once in cmd: SET GH_TOKEN=<YOUR GITHUB TOKEN>
      */
     grunt.registerTask('release', ['release-local', 'github-release', 'clean:release']);
     grunt.registerTask('release-local', ['clean:release', 'build-release', 'compress:release', 'compress:release-min']);
@@ -331,7 +362,10 @@ module.exports = function(grunt) {
 
     grunt.registerTask('travis', 'Travis CI build task', function() {
         if (process.env.TRAVIS_REPO_SLUG === undefined && !grunt.option('pleaserun')) {
-            throw new Error('Task "travis" is not intended to execute in the environment other than Travis CI. Use --pleaserun to run anyway.');
+            throw new Error(
+                'Task "travis" is not intended to execute in the environment other than Travis CI. ' +
+                'Use --pleaserun to run anyway.'
+            );
         }
 
         grunt.task.run(['check', 'build-release', 'docs', 'gh-pages:deploy', 'qunit', 'coveralls']);
