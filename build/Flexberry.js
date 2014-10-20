@@ -1,5 +1,5 @@
-/*! Flexberry - v1.0.0 - 2014-10-17 */
-(function () {
+/*! Flexberry - v1.0.0 - 2014-10-20 */
+(function() {
     'use strict';
 
     function getStr() {
