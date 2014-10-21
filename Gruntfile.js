@@ -41,24 +41,46 @@ module.exports = function(grunt) {
 
         concat: {
             options: {
-                separator: ';',
-                stripBanners: true,
                 banner: '<%= banner %>'
             },
-            build: {
+            debug: {
                 src: ['<%= srcScriptFilePaths %>'],
-                dest: '<%= buildJsFilePath %>'
+                dest: '<%= buildJsFilePath %>',
+                options: {
+                    sourceMap: true,
+                    sourceMapStyle: 'link',
+                    stripBanners: false
+                }
+            },
+            release: {
+                src: ['<%= srcScriptFilePaths %>'],
+                dest: '<%= buildJsFilePath %>',
+                options: {
+                    sourceMap: false,
+                    stripBanners: true
+                }
             }
         },
 
         uglify: {
             options: {
-                preserveComments: 'some',
                 banner: '<%= banner %>'
             },
-            build: {
+            debug: {
                 src: ['<%= srcScriptFilePaths %>'],
-                dest: '<%= buildMinJsFilePath %>'
+                dest: '<%= buildMinJsFilePath %>',
+                options: {
+                    sourceMap: true,
+                    preserveComments: 'some'
+                }
+            },
+            release: {
+                src: ['<%= srcScriptFilePaths %>'],
+                dest: '<%= buildMinJsFilePath %>',
+                options: {
+                    sourceMap: false,
+                    preserveComments: 'some'
+                }
             }
         },
 
@@ -281,7 +303,7 @@ module.exports = function(grunt) {
         },
 
         sass: {
-            dist: {
+            debug: {
                 options: {
                     noCache: true,
                     sourcemap: 'auto',
@@ -321,11 +343,11 @@ module.exports = function(grunt) {
             },
             scripts: {
                 files: ['<%= srcScriptFilePaths %>'],
-                tasks: ['concat', 'uglify']
+                tasks: ['concat:debug', 'uglify:debug']
             },
             styles: {
                 files: ['<%= srcStyleFilePaths %>'],
-                tasks: ['sass:dist']
+                tasks: ['sass:debug']
             }
         }
     });
@@ -341,10 +363,11 @@ module.exports = function(grunt) {
     grunt.registerTask('build', ['build-debug']);
 
     // build with MAP files
-    grunt.registerTask('build-debug', ['clean:build', 'concat', 'uglify', 'sass:dist']);
+    grunt.registerTask('build-debug', ['clean:build', 'concat:debug', 'uglify:debug', 'sass:debug']);
 
     // build without MAP files
-    grunt.registerTask('build-release', ['clean:build', 'concat', 'uglify', 'sass:release', 'sass:release-min']);
+    grunt.registerTask('build-release', ['clean:build', 'concat:release', 'uglify:release', 'sass:release',
+        'sass:release-min']);
 
     grunt.registerTask('docs', ['clean:docs', 'jsdoc']);
 
