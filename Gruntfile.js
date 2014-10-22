@@ -13,7 +13,7 @@ module.exports = function(grunt) {
         tmpDir: '.tmp/',
 
         buildName: '<%= pkg.name %>',
-        buildDir: 'dest/build/',
+        buildDir: 'build/',
         buildFileNameNoExt: '<%= buildDir %><%= buildName %>',
         buildJsFilePath: '<%= buildFileNameNoExt %>.js',
         buildMinJsFilePath: '<%= buildFileNameNoExt %>.min.js',
@@ -34,8 +34,11 @@ module.exports = function(grunt) {
         testHtmlReportDir: '<%= testReportDir %>coverage/',
         testLcovReportDir: '<%= testReportDir %>lcov/',
 
-        docsDir: 'dest/docs/',
+        docsDir: 'docs/',
+        teststandDir: 'teststand/',
         libDir: 'lib/',
+        ghPagesPublishPaths: ['<%= buildDir %>**/*', '<%= docsDir %>**/*', '<%= teststandDir %>**/*',
+            '<%= libDir %>**/*'],
 
         banner: '/*! <%= buildName %> - v<%= pkg.version %> - ' +
                 '<%= grunt.template.today("yyyy-mm-dd") %> */\n',
@@ -169,7 +172,8 @@ module.exports = function(grunt) {
             build: ['<%= buildDir %>'],
             docs: ['<%= docsDir %>'],
             tests: ['<%= testReportDir %>'],
-            release: ['<%= buildArchiveFilePath %>', '<%= buildMinArchiveFilePath %>']
+            release: ['<%= buildArchiveFilePath %>', '<%= buildMinArchiveFilePath %>'],
+            tmp: ['<%= tmpDir %>']
         },
 
         jsdoc: {
@@ -184,22 +188,19 @@ module.exports = function(grunt) {
 
         'gh-pages': {
             options: {
-                git: 'git'
+                git: 'git',
+                clone: '<%= tmpDir %>gh-pages',
+                branch: 'gh-pages',
+                add: true
             },
             publish: {
                 options: {
-                    base: 'dest',
-                    branch: 'gh-pages',
-                    message: 'auto publish',
-                    add: true
+                    message: 'auto publish'
                 },
-                src: ['**/*']
+                src: ['<%= ghPagesPublishPaths %>']
             },
             deploy: {
                 options: {
-                    base: 'dest',
-                    branch: 'gh-pages',
-
                     // Travis environment variables можно посмотреть здесь:
                     // https://github.com/travis-ci/travis-build/blob/master/lib/travis/build/data/env.rb
                     // https://github.com/travis-ci/travis-build/blob/master/spec/shared/script.rb
@@ -210,10 +211,11 @@ module.exports = function(grunt) {
                         email: 'mail@flexberry.net'
                     },
                     repo: 'https://' + process.env.GH_TOKEN + '@github.com/Flexberry/testproj.git',
-                    silent: true, // скрыть лог задачи, иначе github-токен будет выведен в логе билда Travis CI.
-                    add: true
+
+                    // скрыть лог задачи, иначе github-токен будет выведен в логе билда Travis CI.
+                    silent: true
                 },
-                src: ['**/*']
+                src: ['<%= ghPagesPublishPaths %>']
             }
         },
 
@@ -364,7 +366,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('init', ['githooks']);
 
-    grunt.registerTask('default', ['clean', 'test', 'docs', 'release-local']);
+    grunt.registerTask('default', ['clean', 'test', 'docs']);
 
     grunt.registerTask('check', ['lintspaces', 'jscs', 'jshint']);
     grunt.registerTask('check-new', ['newer:lintspaces', 'newer:jscs', 'newer:jshint']);

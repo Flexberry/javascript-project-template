@@ -1,9 +1,9 @@
+.tmp
+.idea
 node_modules
 bower_components
 lib
-.idea
-.tmp
-dest/build
-dest/docs
+build
+docs
 test/report
 .coveralls.yml
