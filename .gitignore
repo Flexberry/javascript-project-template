@@ -2,9 +2,8 @@ node_modules
 bower_components
 lib
 .idea
-.grunt
+.tmp
 dest/build
 dest/docs
 test/report
 .coveralls.yml
-.sass-cache

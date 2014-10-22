@@ -10,7 +10,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
 
-        tmpDir: '.grunt/',
+        tmpDir: '.tmp/',
 
         buildName: '<%= pkg.name %>',
         buildDir: 'dest/build/',
