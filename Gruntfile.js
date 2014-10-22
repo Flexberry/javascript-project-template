@@ -35,6 +35,7 @@ module.exports = function(grunt) {
         testLcovReportDir: '<%= testReportDir %>lcov/',
 
         docsDir: 'dest/docs/',
+        libDir: 'lib/',
 
         banner: '/*! <%= buildName %> - v<%= pkg.version %> - ' +
                 '<%= grunt.template.today("yyyy-mm-dd") %> */\n',
@@ -348,6 +349,15 @@ module.exports = function(grunt) {
             styles: {
                 files: ['<%= srcStyleFilePaths %>'],
                 tasks: ['sass:debug']
+            }
+        },
+
+        bower: {
+            install: {
+                options: {
+                    targetDir: '<%= libDir %>',
+                    layout: 'byComponent'
+                }
             }
         }
     });
