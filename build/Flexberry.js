@@ -1,7 +1,4 @@
 /*! Flexberry - v1.0.0 - 2014-10-22 */
-/**
- * @module Demo module
- */
 (function() {
     'use strict';
 
@@ -18,5 +15,3 @@
         console.log('jshint test');
     }
 }());
-
-//# sourceMappingURL=Flexberry.js.map
