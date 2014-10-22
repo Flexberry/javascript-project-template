@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAGA,IAAK;EACD,IAAI,EAAE,0BAAgB;EACtB,KAAK,EAJO,IAAI",
-"sources": ["../styles/main.scss"],
-"names": [],
-"file": "Flexberry.css"
-}
