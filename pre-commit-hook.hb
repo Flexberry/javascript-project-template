@@ -10,7 +10,7 @@ if [ $BRANCH != "master" ]; then
     exit 0
 fi
 
-echo -en "\n ${BGBLACK}${WHITE} Task '{{command}}{{#if task}} {{task}}{{/if}}{{#if args}} {{args}}{{/if}}' checks everything is okay...${NORMAL}"
+echo -en "\n ${BGBLACK}${WHITE} Task '{{command}}{{#if task}} {{task}}{{/if}}{{#if args}} {{args}}{{/if}}' checks everything is okay...${NORMAL} "
 OUTPUT=$(cd '{{gruntfileDirectory}}' && {{command}}{{#if task}} {{task}}{{/if}}{{#if args}} {{args}}{{/if}})
 EXITCODE=$?
 
