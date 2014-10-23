@@ -358,13 +358,24 @@ module.exports = function(grunt) {
             install: {
                 options: {
                     targetDir: '<%= libDir %>',
-                    layout: 'byComponent'
+                    layout: 'byComponent',
+                    install: true,
+                    copy: true
+                }
+            },
+            refresh: {
+                options: {
+                    targetDir: '<%= libDir %>',
+                    layout: 'byComponent',
+                    install: false,
+                    copy: true
                 }
             }
         }
     });
 
-    grunt.registerTask('init', ['githooks']);
+    grunt.registerTask('init', ['bower:install', 'githooks']);
+    grunt.registerTask('start', ['init', 'watch']);
 
     grunt.registerTask('default', ['clean', 'test', 'docs']);
 
@@ -403,7 +414,7 @@ module.exports = function(grunt) {
             );
         }
 
-        grunt.task.run(['check', 'build-release', 'docs', 'gh-pages:deploy', 'qunit', 'coveralls']);
+        grunt.task.run(['check', 'build-release', 'bower:install', 'docs', 'gh-pages:deploy', 'qunit', 'coveralls']);
     });
 
     grunt.registerTask('mycustomtask', 'My custom task.', function() {

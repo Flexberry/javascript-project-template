@@ -27,6 +27,8 @@
     "time-grunt": "0.2.10"
   },
   "scripts": {
-    "test": "grunt travis"
+    "start": "npm install & grunt start",
+    "test": "grunt test",
+    "travis": "grunt travis"
   }
 }
