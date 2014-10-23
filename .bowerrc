@@ -1,0 +1,6 @@
+{
+    "scripts": {
+        "postinstall": "grunt bower:refreshLib",
+        "preuninstall": "grunt bower:removeLib --components '%'"
+    }
+}

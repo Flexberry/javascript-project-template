@@ -360,10 +360,10 @@ module.exports = function(grunt) {
                     targetDir: '<%= libDir %>',
                     layout: 'byComponent',
                     install: true,
-                    copy: true
+                    copy: false
                 }
             },
-            refresh: {
+            refreshLib: {
                 options: {
                     targetDir: '<%= libDir %>',
                     layout: 'byComponent',
@@ -415,6 +415,39 @@ module.exports = function(grunt) {
         }
 
         grunt.task.run(['check', 'build-release', 'bower:install', 'docs', 'gh-pages:deploy', 'qunit', 'coveralls']);
+    });
+
+    grunt.registerTask('bower:removeLib', 'Remove bower components from library folder.', function() {
+        var rimraf = require('rimraf'),
+            path = require('path'),
+            fs = require('fs'),
+            dir = grunt.config('libDir'),
+            cmpArg = grunt.option('components'),
+            rmpaths;
+
+        if (!cmpArg) {
+            rmpaths = [dir];
+        } else {
+            rmpaths = cmpArg.split(' ').map(function(x) {
+                return path.join(dir, x);
+            });
+        }
+
+        rmpaths.forEach(function(rmpath) {
+            var msg = 'Remove ' + rmpath;
+            if (fs.existsSync(rmpath)) {
+                try {
+                    rimraf.sync(rmpath);
+                    grunt.log.ok(msg);
+                }
+                catch (ex) {
+                    grunt.log.error(msg);
+                    throw ex;
+                }
+            } else {
+                grunt.log.error(msg + ' NOTFOUND');
+            }
+        });
     });
 
     grunt.registerTask('mycustomtask', 'My custom task.', function() {
