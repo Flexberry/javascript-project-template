@@ -90,13 +90,18 @@ module.exports = function(grunt) {
 
         githooks: {
             all: {
-                'pre-commit': 'check',
-                options: {
+                'pre-commit': {
+                    command: 'grunt',
+                    taskNames: 'check',
                     hashbang: '#!/bin/sh',
-                    template: 'githook.hb',
-                    startMarker: '## LET THE FUN BEGIN',
-                    endMarker: '## PARTY IS OVER',
+                    template: 'pre-commit-hook.hb',
                     preventExit: false
+                },
+
+                'post-merge': {
+                    hashbang: '#!/bin/sh',
+                    template: 'post-merge-hook.hb',
+                    preventExit: true
                 }
             }
         },
@@ -132,7 +137,7 @@ module.exports = function(grunt) {
                 }
             },
             configs: {
-                src: ['.*.yml', '.*rc', 'githook.hb'],
+                src: ['.*.yml', '.*rc', 'pre-commit-hook.hb'],
                 options: {
                 }
             }
