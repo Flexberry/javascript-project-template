@@ -90,16 +90,20 @@ module.exports = function(grunt) {
 
         githooks: {
             all: {
+                options: {
+                    hashbang: '#!/bin/sh',
+                    startMarker: '# GRUNT-GITHOOKS START',
+                    endMarker: '# GRUNT-GITHOOKS END'
+                },
+
                 'pre-commit': {
                     command: 'grunt',
                     taskNames: 'check',
-                    hashbang: '#!/bin/sh',
                     template: 'pre-commit-hook.hb',
                     preventExit: false
                 },
 
                 'post-merge': {
-                    hashbang: '#!/bin/sh',
                     template: 'post-merge-hook.hb',
                     preventExit: true
                 }
