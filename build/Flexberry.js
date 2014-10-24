@@ -1,4 +1,4 @@
-/*! Flexberry - v1.0.0 - 2014-10-23 */
+/*! Flexberry - v1.0.0 - 2014-10-24 */
 (function() {
     'use strict';
 
