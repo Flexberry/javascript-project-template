@@ -3,12 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <title>Tests</title>
-    <link rel="stylesheet" href="..\node_modules\qunitjs\qunit\qunit.css">
-    <script src="..\node_modules\qunitjs\qunit\qunit.js"></script>
-    <script src="..\build\Flexberry.min.js"></script>
+
+    <link rel="stylesheet" href="../node_modules/qunitjs/qunit/qunit.css">
+    <script src="../node_modules/qunitjs/qunit/qunit.js"></script>
+
+    <script src="../lib/jquery/jquery.js"></script>
+    <script src="../build/Flexberry.min.js"></script>
+
     <script>
-        QUnit.test("equal test", function( assert ) {
+        QUnit.test("equal test", function(assert) {
             assert.equal("foo", "foo");
+        });
+
+        QUnit.test("jquery from lib required", function(assert) {
+            assert.equal(!!jQuery, true);
         });
     </script>
 </head>
