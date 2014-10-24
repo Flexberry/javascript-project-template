@@ -364,9 +364,13 @@ module.exports = function(grunt) {
         },
 
         bower: {
+            options: {
+                targetDir: '<%= libDir %>',
+                layout: 'byComponent',
+                packages: (grunt.option('packages') || '').trim().split(' ')
+            },
             cleanup: {
                 options: {
-                    targetDir: '<%= libDir %>',
                     cleanTargetDir: true,
                     cleanBowerDir: true,
                     install: false,
@@ -375,18 +379,23 @@ module.exports = function(grunt) {
             },
             install: {
                 options: {
-                    targetDir: '<%= libDir %>',
-                    layout: 'byComponent',
                     install: true,
-                    copy: false
+                    copy: false,
+                    prune: true
                 }
             },
             refreshLib: {
                 options: {
-                    targetDir: '<%= libDir %>',
-                    layout: 'byComponent',
                     install: false,
                     copy: true
+                }
+            },
+            removeLib: {
+                options:{
+                    copy: false,
+                    install: false,
+                    cleanBowerDir: false,
+                    cleanTargetDir: true
                 }
             }
         }
@@ -433,39 +442,6 @@ module.exports = function(grunt) {
         }
 
         grunt.task.run(['check', 'build-release', 'bower:install', 'docs', 'gh-pages:deploy', 'qunit', 'coveralls']);
-    });
-
-    grunt.registerTask('bower:removeLib', 'Remove bower components from library folder.', function() {
-        var rimraf = require('rimraf'),
-            path = require('path'),
-            fs = require('fs'),
-            dir = grunt.config('libDir'),
-            cmpArg = grunt.option('components'),
-            rmpaths;
-
-        if (!cmpArg) {
-            rmpaths = [dir];
-        } else {
-            rmpaths = cmpArg.split(' ').map(function(x) {
-                return path.join(dir, x);
-            });
-        }
-
-        rmpaths.forEach(function(rmpath) {
-            var msg = 'Remove ' + rmpath;
-            if (fs.existsSync(rmpath)) {
-                try {
-                    rimraf.sync(rmpath);
-                    grunt.log.ok(msg);
-                }
-                catch (ex) {
-                    grunt.log.error(msg);
-                    throw ex;
-                }
-            } else {
-                grunt.log.error(msg + ' NOTFOUND');
-            }
-        });
     });
 
     grunt.registerTask('mycustomtask', 'My custom task.', function() {
