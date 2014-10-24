@@ -141,7 +141,7 @@ module.exports = function(grunt) {
                 }
             },
             configs: {
-                src: ['.*.yml', '.*rc', 'pre-commit-hook.hb'],
+                src: ['*.yml', '.*rc', '*-hook.hb', '*.json'],
                 options: {
                 }
             }
