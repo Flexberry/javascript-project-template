@@ -367,7 +367,7 @@ module.exports = function(grunt) {
             options: {
                 targetDir: '<%= libDir %>',
                 layout: 'byComponent',
-                packages: (grunt.option('packages') || '').trim().split(' ')
+                packages: grunt.option('packages') ? grunt.option('packages').trim().split(' ') : undefined
             },
             cleanup: {
                 options: {
