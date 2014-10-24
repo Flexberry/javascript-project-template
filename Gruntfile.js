@@ -219,7 +219,7 @@ module.exports = function(grunt) {
                         name: 'Flexberry',
                         email: 'mail@flexberry.net'
                     },
-                    repo: 'https://' + process.env.GH_TOKEN + '@github.com/Flexberry/testproj.git',
+                    repo: 'https://' + process.env.GH_TOKEN + '@github.com/Flexberry/javascript-project-template.git',
 
                     // скрыть лог задачи, иначе github-токен будет выведен в логе билда Travis CI.
                     silent: true
@@ -284,7 +284,7 @@ module.exports = function(grunt) {
 
         'github-release': {
             options: {
-                repository: 'Flexberry/testproj',
+                repository: 'Flexberry/javascript-project-template',
                 auth: {
                     user: process.env.GH_TOKEN,
                     password: ''
