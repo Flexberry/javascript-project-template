@@ -364,6 +364,15 @@ module.exports = function(grunt) {
         },
 
         bower: {
+            cleanup: {
+                options: {
+                    targetDir: '<%= libDir %>',
+                    cleanTargetDir: true,
+                    cleanBowerDir: true,
+                    install: false,
+                    copy: false
+                }
+            },
             install: {
                 options: {
                     targetDir: '<%= libDir %>',
