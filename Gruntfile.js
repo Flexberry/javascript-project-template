@@ -40,7 +40,7 @@ module.exports = function(grunt) {
         ghPagesPublishPaths: ['<%= buildDir %>**/*', '<%= docsDir %>**/*', '<%= teststandDir %>**/*',
             '<%= libDir %>**/*'],
 
-        banner: '/*! <%= buildName %> - v<%= pkg.version %> - ' +
+        banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
                 '<%= grunt.template.today("yyyy-mm-dd") %> */\n',
 
         concat: {
