@@ -200,7 +200,8 @@ module.exports = function(grunt) {
                 git: 'git',
                 clone: '<%= tmpDir %>gh-pages',
                 branch: 'gh-pages',
-                add: true
+                add: false,
+                only: '<%= ghPagesPublishPaths %>'
             },
             publish: {
                 options: {
@@ -214,15 +215,11 @@ module.exports = function(grunt) {
                     // https://github.com/travis-ci/travis-build/blob/master/lib/travis/build/data/env.rb
                     // https://github.com/travis-ci/travis-build/blob/master/spec/shared/script.rb
                     message: util.format('auto deploy\nReason: %s', process.env.TRAVIS_COMMIT || 'unknown'),
-
                     user: {
                         name: 'Flexberry',
                         email: 'mail@flexberry.net'
                     },
-                    repo: 'https://' + process.env.GH_TOKEN + '@github.com/Flexberry/javascript-project-template.git',
-
-                    // скрыть лог задачи, иначе github-токен будет выведен в логе билда Travis CI.
-                    silent: true
+                    repo: 'https://' + process.env.GH_TOKEN + '@github.com/Flexberry/javascript-project-template.git'
                 },
                 src: ['<%= ghPagesPublishPaths %>']
             }
