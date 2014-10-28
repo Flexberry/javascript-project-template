@@ -1,4 +1,4 @@
-/*! Flexberry-javascript-project-template - v1.0.0 - 2014-10-27 */
+/*! Flexberry-javascript-project-template - v1.0.0 - 2014-10-28 */
 (function() {
     'use strict';
 
