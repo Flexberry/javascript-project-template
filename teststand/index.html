@@ -8,6 +8,16 @@
 
         <link rel="stylesheet" href="../build/Flexberry-javascript-project-template.css">
         <script src="../build/Flexberry-javascript-project-template.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                var unicorn = new Unicorn(),
+                    art = unicorn.getArt();
+
+                console.log(art);
+                $(document.body).append($('<pre>').text(art));
+            });
+        </script>
     </head>
 
     <body>

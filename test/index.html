@@ -11,8 +11,11 @@
     <script src="../build/Flexberry-javascript-project-template.min.js"></script>
 
     <script>
-        QUnit.test("equal test", function(assert) {
-            assert.equal("foo", "foo");
+        QUnit.test("unicorn test", function(assert) {
+            var name = 'Magic horse';
+            var unicorn = new Unicorn(name);
+            assert.ok(unicorn.getArt());
+            assert.equal(name, unicorn.getName());
         });
 
         QUnit.test("jquery from lib required", function(assert) {
