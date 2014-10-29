@@ -24,6 +24,7 @@
 
     /**
      * Creates a new unicorn.
+     * @param {string} name Unicorn name.
      * @constructor
      * @alias module:Unicorn
      */
