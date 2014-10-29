@@ -1,17 +1,26 @@
 {
-    "tags": {
-        "allowUnknownTags": true
+    "tags"      : {
+        "allowUnknownTags" : true
     },
-    "source": {
-        "excludePattern": "(^|\\/|\\\\)_"
+    "plugins"   : ["plugins/markdown"],
+    "templates" : {
+        "cleverLinks"           : false,
+        "monospaceLinks"        : false,
+        "dateFormat"            : "ddd MMM Do YYYY",
+        "outputSourceFiles"     : true,
+        "outputSourcePath"      : true,
+        "systemName"            : "API Documenatation",
+        "footer"                : "",
+        "copyright"             : "",
+        "navType"               : "vertical",
+        "theme"                 : "cerulean",
+        "linenums"              : true,
+        "collapseSymbols"       : false,
+        "inverseNav"            : true,
+        "highlightTutorialCode" : true
     },
-    "plugins": [],
-    "templates": {
-        "cleverLinks": false,
-        "monospaceLinks": false,
-        "default": {
-            "outputSourceFiles": true
-        }
-    },
-    "jsVersion": 180
+    "markdown"  : {
+        "parser"   : "gfm",
+        "hardwrap" : true
+    }
 }

@@ -189,8 +189,9 @@ module.exports = function(grunt) {
             dist: {
                 src: ['<%= srcScriptFilePaths %>'],
                 options: {
-                    configure: '.jsdocrc',
-                    destination: '<%= docsDir %>'
+                    destination: '<%= docsDir %>',
+                    template: 'node_modules/grunt-jsdoc/node_modules/ink-docstrap/template',
+                    configure: '.jsdocrc'
                 }
             }
         },
