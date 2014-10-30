@@ -99,12 +99,12 @@ module.exports = function(grunt) {
                 'pre-commit': {
                     command: 'grunt',
                     taskNames: 'check',
-                    template: 'pre-commit-hook.hb',
+                    template: 'pre-commit-hook.hbs',
                     preventExit: false
                 },
 
                 'post-merge': {
-                    template: 'post-merge-hook.hb',
+                    template: 'post-merge-hook.hbs',
                     preventExit: true
                 }
             }
@@ -141,7 +141,7 @@ module.exports = function(grunt) {
                 }
             },
             configs: {
-                src: ['*.yml', '.*rc', '*-hook.hb', '*.json'],
+                src: ['*.yml', '.*rc', '*-hook.hbs', '*.json'],
                 options: {
                 }
             }
