@@ -11,10 +11,13 @@
         "plugins/sourcetag"
     ],
     "templates" : {
-        "cleverLinks"         : true,
-        "monospaceLinks"      : true,
-        "outputSourceFiles"   : true,
-        "outputSourcePath"    : true
+        "default": {
+            "cleverLinks"           : true,
+            "monospaceLinks"        : true,
+            "outputSourceFiles"     : true,
+            "outputSourcePath"      : true,
+            "outputSourceReference" : true
+        }
     },
     "markdown"  : {
         "parser"   : "gfm",
