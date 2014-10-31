@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Flexberry-javascript-project-template v1.0.0</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="scripts/jquery-2.1.1.min.js"></script>
+    <script src="scripts/page.js"></script>
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,300,700,600,400' rel='stylesheet' type='text/css'>
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link href="styles/bootstrap.min.css" rel="stylesheet">
+    <link href="styles/docs.css" rel="stylesheet">
+    <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
+  </head>
+  <body>
+    <header class="header navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="index.html">
+            Flexberry-javascript-project-template v1.0.0
+          </a>
+          <div class="navbar-right">
+            <div class="external-links">
+              <i class="fa fa-github"></i>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="primary-content container-fluid">
+      <div class="row-fluid">
+          <div class="sidenav col-md-3">
+            
+
+
+<div class="module-list">
+  <h3>Modules</h3>
+  <ul class="module-listing">
+  
+    <li data-module-name="Flexberry-javascript-project-template" class="collapsed collapsable module-item">
+      <span class="collapsed-status">
+        <i class="expand fa fa-plus-square-o"></i>
+        <i class="collapse fa fa-minus-square-o"></i>
+      </span>
+
+      Flexberry-javascript-project-template
+      <ul class="thing-list">
+        
+
+          
+
+  <li class="thing">
+
+    
+      <i class="fa fa-cube"></i>
+    
+
+    
+
+    
+
+    
+
+    <a href="module-Unicorn.html">require("Unicorn")</a>
+  </li>
+
+
+
+          <ul class="thing-list">
+            
+          </ul>
+
+        
+      </ul>
+    </li>
+  
+  </ul>
+</div>
+
+          </div>
+
+          <div class="col-md-9">
+              
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/**
+ * A module representing a unicorn.
+ * @module Unicorn
+ */
+
+// Uses Node, AMD or browser globals to create a module.
+(function(root, factory) {
+    'use strict';
+
+    if (typeof define === 'function' &amp;&amp; define.amd) {
+        // AMD. Register as an anonymous module.
+        define([], factory);
+    } else if (typeof exports === 'object') {
+        // Node. Does not work with strict CommonJS, but
+        // only CommonJS-like environments that support module.exports,
+        // like Node.
+        module.exports = factory();
+    } else {
+        // Browser globals (root is window)
+        root.Unicorn = factory();
+    }
+}(this, function() {
+    'use strict';
+
+    /**
+     * Creates a new unicorn.
+     * @param {string} name Unicorn name.
+     * @constructor
+     * @alias module:Unicorn
+     */
+    var Unicorn = function(name) {
+        this._name = name;
+    };
+
+    /**
+     * Gets unicorn name.
+     * @returns {string} Unicorn name.
+     */
+    Unicorn.prototype.getName = function() {
+        return this._name;
+    };
+
+    /**
+     * Gets ASCII art with unicorn portrait.
+     * @returns {string} Multiline string (LF eol) with a picture of a unicorn.
+     */
+    Unicorn.prototype.getArt = function() {
+        var art =
+        '        \\.                                      \n' +
+        '         \\\'.      ;.                           \n' +
+        '          \\ \'. ,--\'\'-.~-~-\'-,               \n' +
+        '           \\,-\' ,-.   \'.~-~-~~,               \n' +
+        '        ,-\'   (###)    \\-~\'~=-.               \n' +
+        '     _,-\'       \'-\'      \\=~-"~~\',          \n' +
+        '    /o                    \\~-""~=-,             \n' +
+        '    \\__                    \\=-,~"-~,           \n' +
+        '       """===-----.         \\~=-"~-.            \n' +
+        '                   \\         \\*=~-"            \n' +
+        '                    \\         "=====----        \n' +
+        '                     \\                          \n' +
+        '                      \\                         \n';
+
+        return art;
+    };
+
+    return Unicorn;
+}));
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+          </div>
+      </div>
+
+        <br clear="both">
+
+      <footer>
+      </footer>
+      <script> prettyPrint(); </script>
+    </div>
+  </body>
+</html>
