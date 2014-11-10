@@ -1,4 +1,4 @@
-testproj
+javascript-project-template
 ========
 
 Эта ветка является:
