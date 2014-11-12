@@ -1,8 +1,3 @@
-javascript-project-template
-========
-[![Build Status](https://travis-ci.org/Flexberry/javascript-project-template.svg?branch=master)](https://travis-ci.org/Flexberry/javascript-project-template)
-[![Dependency Status](https://gemnasium.com/Flexberry/javascript-project-template.svg)](https://gemnasium.com/Flexberry/javascript-project-template)
-[![DevDependencies Status](https://david-dm.org/Flexberry/javascript-project-template/dev-status.svg)](https://david-dm.org/Flexberry/javascript-project-template/#info=devDependencies)
-[![Coverage Status](https://img.shields.io/coveralls/Flexberry/javascript-project-template.svg)](https://coveralls.io/r/Flexberry/javascript-project-template?branch=master)
-[![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
+# javascript-project-template <br/>[![Build Status](https://travis-ci.org/Flexberry/javascript-project-template.svg?branch=master)](https://travis-ci.org/Flexberry/javascript-project-template) [![Dependency Status](https://gemnasium.com/Flexberry/javascript-project-template.svg)](https://gemnasium.com/Flexberry/javascript-project-template) [![DevDependencies Status](https://david-dm.org/Flexberry/javascript-project-template/dev-status.svg)](https://david-dm.org/Flexberry/javascript-project-template/#info=devDependencies) [![Coverage Status](https://img.shields.io/coveralls/Flexberry/javascript-project-template.svg)](https://coveralls.io/r/Flexberry/javascript-project-template?branch=master) [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
+Проект javascript-project-template - это front-end template с продуманной инфраструктурой, автоматизацией и системой сборки на node.js (Grunt). Подробнее читайте в [Wiki](../../wiki).
