@@ -398,9 +398,6 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('init', ['bower:install', 'githooks']);
-    grunt.registerTask('start', ['init', 'watch']);
-
     grunt.registerTask('default', ['clean', 'test', 'docs']);
 
     grunt.registerTask('check', ['lintspaces', 'jscs', 'jshint']);
