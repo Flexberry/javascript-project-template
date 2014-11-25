@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Flexberry PLATFORM",
   "license": "MIT",
+  "author": "Flexberry <mail@flexberry.net>",
   "repository": {
     "type": "git",
     "url": "https://github.com/Flexberry/javascript-project-template.git"
@@ -28,6 +29,7 @@
     "grunt-qunit-istanbul": "^0.4.5",
     "jsdoc3-bootstrap": "https://github.com/nagits/jsdoc3-bootstrap/tarball/master",
     "load-grunt-tasks": "^0.6.0",
+    "parse-author": "^0.1.0",
     "qunitjs": "^1.15.0",
     "rimraf": "^2.2.8",
     "time-grunt": "0.2.10"

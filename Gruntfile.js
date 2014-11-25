@@ -1,14 +1,19 @@
 module.exports = function(grunt) {
     'use strict';
 
-    var util = require('util');
+    var pkg = grunt.file.readJSON('package.json');
+
+    // TODO: move getPackageAuthor to grunt-gh-pages and make pull request
+    // (string support for gh-pages.options.user as defined in package.json specification).
+    // Then delete this with the function.
+    pkg.author = getPackageAuthor();
 
     require('time-grunt')(grunt);
     require('load-grunt-tasks')(grunt);
 
     // Project configuration.
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
+        pkg: pkg,
 
         tmpDir: '.tmp/',
 
@@ -42,6 +47,7 @@ module.exports = function(grunt) {
 
         banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
                 '<%= grunt.template.today("yyyy-mm-dd") %> */\n',
+        repositoryShortPath: getRepositoryShortPath(),
 
         concat: {
             options: {
@@ -211,15 +217,12 @@ module.exports = function(grunt) {
             },
             deploy: {
                 options: {
-                    // Travis environment variables можно посмотреть здесь:
+                    // Travis environment variables can be found here:
                     // https://github.com/travis-ci/travis-build/blob/master/lib/travis/build/data/env.rb
                     // https://github.com/travis-ci/travis-build/blob/master/spec/shared/script.rb
-                    message: util.format('auto deploy\nReason: %s', process.env.TRAVIS_COMMIT || 'unknown'),
-                    user: {
-                        name: 'Flexberry',
-                        email: 'mail@flexberry.net'
-                    },
-                    repo: 'https://' + process.env.GH_TOKEN + '@github.com/Flexberry/javascript-project-template.git'
+                    message: require('util').format('auto deploy\nReason: %s', process.env.TRAVIS_COMMIT || 'unknown'),
+                    user: '<%= pkg.author %>',
+                    repo: 'https://' + process.env.GH_TOKEN + '@github.com/<%= repositoryShortPath %>.git'
                 },
                 src: ['<%= ghPagesPublishPaths %>']
             }
@@ -281,7 +284,7 @@ module.exports = function(grunt) {
 
         'github-release': {
             options: {
-                repository: 'Flexberry/javascript-project-template',
+                repository: '<%= repositoryShortPath %>',
                 auth: {
                     user: process.env.GH_TOKEN,
                     password: ''
@@ -438,16 +441,57 @@ module.exports = function(grunt) {
         grunt.task.run(['check', 'build-release', 'bower:install', 'docs', 'gh-pages:deploy', 'qunit', 'coveralls']);
     });
 
-    grunt.registerTask('mycustomtask', 'My custom task.', function() {
-        // http://gruntjs.com/creating-tasks#custom-tasks
-        grunt.log.writeln('Currently running my custom task.');
+    /* Usage:  grunt print-config --p=concat  (print out 'concat' property)
+     * or:     grunt print-config             (print out all properties)
+     */
+    grunt.registerTask('print-config', 'Print out the grunt configuration', function() {
+        var propertyName = grunt.option('p'),
+            configObj = grunt.config(propertyName),
+            configStr = JSON.stringify(configObj, null, 2);
 
-        // grunt.task.run('bar', 'baz');
-        // Or:
-        // grunt.task.run(['bar', 'baz']);
-
-        // Use task args (http://gruntjs.com/api/grunt.option):
-        // grunt mycustomtask --opt
-        // grunt.option('opt')
+        return configStr !== undefined ?
+            grunt.log.oklns(configStr) :
+            grunt.log.errorlns('Property "' + propertyName + '" is not defined.');
     });
+
+    // TODO: move to a new npm module 'github-repo-urlhelper'. Also, refactor gh-pages.deploy.options.repo.
+    function getRepositoryShortPath() {
+        var url = pkg.repository && pkg.repository.url,
+            found;
+        if (!url) {
+            throw new Error('Repository URL not found in package.json, please define it: ' +
+                            'https://www.npmjs.org/doc/files/package.json.html#repository');
+        }
+
+        found = url.match(/.*github\.com[\/:]([^\.]*)(?:\.git)?/i);
+        found = found && found[1];
+        if (!found) {
+            throw new Error('Failed to parse repository URL from package.json. ' +
+                            'GitHub URL via HTTPS or SSH expected.');
+        }
+
+        return found;
+    }
+
+    function getPackageAuthor() {
+        var author = pkg.author,
+            type = typeof author,
+            errMsg;
+
+        switch (type) {
+            case 'string':
+                author = require('parse-author')(author);
+                break;
+            case 'object':
+                break;
+            case 'undefined':
+                errMsg = 'Task "gh-pages:deploy" requires "author" in package.json.';
+                throw new Error(errMsg);
+            default:
+                errMsg = 'Invalid type of "author" in package.json: ' + type + ' (string or object expected).';
+                throw new TypeError(errMsg);
+        }
+
+        return author;
+    }
 };
