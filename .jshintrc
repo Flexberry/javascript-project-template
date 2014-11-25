@@ -4,7 +4,7 @@
     "node": true,
     "eqeqeq": true,
     "indent": 4,
-    "latedef": true,
+    "latedef": "nofunc",
     "maxlen": 120,
     "newcap": true,
     "strict": true,
