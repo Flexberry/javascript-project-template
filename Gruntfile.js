@@ -221,8 +221,7 @@ module.exports = function(grunt) {
                     // https://github.com/travis-ci/travis-build/blob/master/lib/travis/build/data/env.rb
                     // https://github.com/travis-ci/travis-build/blob/master/spec/shared/script.rb
                     message: require('util').format('auto deploy\nReason: %s', process.env.TRAVIS_COMMIT || 'unknown'),
-                    user: '<%= pkg.author %>',
-                    repo: 'https://' + process.env.GH_TOKEN + '@github.com/<%= repositoryShortPath %>.git'
+                    user: '<%= pkg.author %>'
                 },
                 src: ['<%= ghPagesPublishPaths %>']
             }
@@ -438,6 +437,12 @@ module.exports = function(grunt) {
             );
         }
 
+        // Repo URL is assigned here, not in the task options,
+        // otherwise URL with 'GH_TOKEN' will be displayed in the log if 'verbose' option specified.
+        var repoShortPath = getRepositoryShortPath(),
+            repo = 'https://' + process.env.GH_TOKEN + '@github.com/' + repoShortPath + '.git';
+        grunt.config('gh-pages.deploy.options.repo', repo);
+
         grunt.task.run(['check', 'build-release', 'bower:install', 'docs', 'gh-pages:deploy', 'qunit', 'coveralls']);
     });
 
@@ -454,7 +459,8 @@ module.exports = function(grunt) {
             grunt.log.errorlns('Property "' + propertyName + '" is not defined.');
     });
 
-    // TODO: move to a new npm module 'github-repo-urlhelper'. Also, refactor gh-pages.deploy.options.repo.
+    // TODO: move to a new npm module 'github-repo-urlhelper'.
+    // Also, refactor gh-pages.deploy.options.repo (see travis task).
     function getRepositoryShortPath() {
         var url = pkg.repository && pkg.repository.url,
             found;
