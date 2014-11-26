@@ -44,7 +44,6 @@ module.exports = function(grunt) {
         libDir: 'lib/',
         ghPagesPublishPaths: ['<%= buildDir %>**/*', '<%= docsDir %>**/*', '<%= teststandDir %>**/*',
             '<%= libDir %>**/*'],
-        ghPagesDeployRemote: 'origin-with-token',
 
         banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
                 '<%= grunt.template.today("yyyy-mm-dd") %> */\n',
@@ -223,7 +222,7 @@ module.exports = function(grunt) {
                     // https://github.com/travis-ci/travis-build/blob/master/spec/shared/script.rb
                     message: require('util').format('auto deploy\nReason: %s', process.env.TRAVIS_COMMIT || 'unknown'),
                     user: '<%= pkg.author %>',
-                    remote: '<%= ghPagesDeployRemote %>'
+                    repo: 'https://$GH_TOKEN@github.com/<%= repositoryShortPath %>.git'
                 },
                 src: ['<%= ghPagesPublishPaths %>']
             }
@@ -399,14 +398,6 @@ module.exports = function(grunt) {
                     cleanTargetDir: true
                 }
             }
-        },
-
-        shell: {
-            gitAddRemoteForGhPagesDeploy: {
-                // Be careful, GH_TOKEN shouldn't get to the Travis log, even if "verbose" option specified.
-                command: 'git remote add <%= ghPagesDeployRemote %> ' +
-                    'https://$GH_TOKEN@github.com/<%= repositoryShortPath %>.git'
-            }
         }
     });
 
@@ -447,8 +438,7 @@ module.exports = function(grunt) {
             );
         }
 
-        grunt.task.run(['check', 'build-release', 'bower:install', 'docs',
-            'shell:gitAddRemoteForGhPagesDeploy', 'gh-pages:deploy', 'qunit', 'coveralls']);
+        grunt.task.run(['check', 'build-release', 'bower:install', 'docs', 'gh-pages:deploy', 'qunit', 'coveralls']);
     });
 
     /* Usage:  grunt print-config --p=concat  (print out 'concat' property)
@@ -464,8 +454,7 @@ module.exports = function(grunt) {
             grunt.log.errorlns('Property "' + propertyName + '" is not defined.');
     });
 
-    // TODO: move to a new npm module 'github-repo-urlhelper'.
-    // Also, refactor shell:gitAddRemoteForGhPagesDeploy.
+    // TODO: move to a new npm module 'github-repo-urlhelper'. Also, refactor gh-pages.deploy.options.repo.
     function getRepositoryShortPath() {
         var url = pkg.repository && pkg.repository.url,
             found;
