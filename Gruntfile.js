@@ -44,6 +44,7 @@ module.exports = function(grunt) {
         libDir: 'lib/',
         ghPagesPublishPaths: ['<%= buildDir %>**/*', '<%= docsDir %>**/*', '<%= teststandDir %>**/*',
             '<%= libDir %>**/*'],
+        ghPagesDeployRemote: 'origin-with-token',
 
         banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
                 '<%= grunt.template.today("yyyy-mm-dd") %> */\n',
@@ -221,7 +222,8 @@ module.exports = function(grunt) {
                     // https://github.com/travis-ci/travis-build/blob/master/lib/travis/build/data/env.rb
                     // https://github.com/travis-ci/travis-build/blob/master/spec/shared/script.rb
                     message: require('util').format('auto deploy\nReason: %s', process.env.TRAVIS_COMMIT || 'unknown'),
-                    user: '<%= pkg.author %>'
+                    user: '<%= pkg.author %>',
+                    remote: '<%= ghPagesDeployRemote %>'
                 },
                 src: ['<%= ghPagesPublishPaths %>']
             }
@@ -397,6 +399,14 @@ module.exports = function(grunt) {
                     cleanTargetDir: true
                 }
             }
+        },
+
+        shell: {
+            gitAddRemoteForGhPagesDeploy: {
+                // Be careful, GH_TOKEN shouldn't get to the Travis log, even if "verbose" option specified.
+                command: 'git remote add <%= ghPagesDeployRemote %> ' +
+                    'https://$GH_TOKEN@github.com/<%= repositoryShortPath %>.git'
+            }
         }
     });
 
@@ -437,13 +447,8 @@ module.exports = function(grunt) {
             );
         }
 
-        // Repo URL is assigned here, not in the task options,
-        // otherwise URL with 'GH_TOKEN' will be displayed in the log if 'verbose' option specified.
-        var repoShortPath = getRepositoryShortPath(),
-            repo = 'https://' + process.env.GH_TOKEN + '@github.com/' + repoShortPath + '.git';
-        grunt.config('gh-pages.deploy.options.repo', repo);
-
-        grunt.task.run(['check', 'build-release', 'bower:install', 'docs', 'gh-pages:deploy', 'qunit', 'coveralls']);
+        grunt.task.run(['check', 'build-release', 'bower:install', 'docs',
+            'shell:gitAddRemoteForGhPagesDeploy', 'gh-pages:deploy', 'qunit', 'coveralls']);
     });
 
     /* Usage:  grunt print-config --p=concat  (print out 'concat' property)
@@ -460,7 +465,7 @@ module.exports = function(grunt) {
     });
 
     // TODO: move to a new npm module 'github-repo-urlhelper'.
-    // Also, refactor gh-pages.deploy.options.repo (see travis task).
+    // Also, refactor shell:gitAddRemoteForGhPagesDeploy.
     function getRepositoryShortPath() {
         var url = pkg.repository && pkg.repository.url,
             found;

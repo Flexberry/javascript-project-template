@@ -27,6 +27,7 @@
     "grunt-lintspaces": "^0.6.0",
     "grunt-newer": "^0.7.0",
     "grunt-qunit-istanbul": "^0.4.5",
+    "grunt-shell": "^1.1.1",
     "jsdoc3-bootstrap": "https://github.com/nagits/jsdoc3-bootstrap/tarball/master",
     "load-grunt-tasks": "^0.6.0",
     "parse-author": "^0.1.0",
