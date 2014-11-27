@@ -222,7 +222,7 @@ module.exports = function(grunt) {
                     // https://github.com/travis-ci/travis-build/blob/master/spec/shared/script.rb
                     message: require('util').format('auto deploy\nReason: %s', process.env.TRAVIS_COMMIT || 'unknown'),
                     user: '<%= pkg.author %>',
-                    repo: 'https://$GH_TOKEN@github.com/<%= repositoryShortPath %>.git'
+                    repo: 'https://' + process.env.GH_TOKEN + '@github.com/<%= repositoryShortPath %>.git'
                 },
                 src: ['<%= ghPagesPublishPaths %>']
             }
