@@ -3,11 +3,6 @@ module.exports = function(grunt) {
 
     var pkg = grunt.file.readJSON('package.json');
 
-    // TODO: move getPackageAuthor to grunt-gh-pages and make pull request
-    // (string support for gh-pages.options.user as defined in package.json specification).
-    // Then delete this with the function.
-    pkg.author = getPackageAuthor();
-
     require('time-grunt')(grunt);
     require('load-grunt-tasks')(grunt);
 
@@ -455,6 +450,7 @@ module.exports = function(grunt) {
     });
 
     // TODO: move to a new npm module 'github-repo-urlhelper'. Also, refactor gh-pages.deploy.options.repo.
+    // TODO: или научить grunt-github-releaser принимать полный repository url.
     function getRepositoryShortPath() {
         var url = pkg.repository && pkg.repository.url,
             found;
@@ -471,27 +467,5 @@ module.exports = function(grunt) {
         }
 
         return found;
-    }
-
-    function getPackageAuthor() {
-        var author = pkg.author,
-            type = typeof author,
-            errMsg;
-
-        switch (type) {
-            case 'string':
-                author = require('parse-author')(author);
-                break;
-            case 'object':
-                break;
-            case 'undefined':
-                errMsg = 'Task "gh-pages:deploy" requires "author" in package.json.';
-                throw new Error(errMsg);
-            default:
-                errMsg = 'Invalid type of "author" in package.json: ' + type + ' (string or object expected).';
-                throw new TypeError(errMsg);
-        }
-
-        return author;
     }
 };
