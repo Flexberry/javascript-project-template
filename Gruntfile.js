@@ -1,7 +1,8 @@
 module.exports = function(grunt) {
     'use strict';
 
-    var pkg = grunt.file.readJSON('package.json');
+    var pkg = grunt.file.readJSON('package.json'),
+        helper = require('./grunt-helpers.js')(grunt);
 
     require('time-grunt')(grunt);
     require('load-grunt-tasks')(grunt);
@@ -9,6 +10,7 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: pkg,
+        gruntFilePaths: ['Gruntfile.js', 'grunt-helpers.js'],
 
         tmpDir: '.tmp/',
 
@@ -42,7 +44,7 @@ module.exports = function(grunt) {
 
         banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' +
                 '<%= grunt.template.today("yyyy-mm-dd") %> */\n',
-        repositoryShortPath: getRepositoryShortPath(),
+        repositoryShortPath: helper.getRepositoryShortPath(pkg),
 
         concat: {
             options: {
@@ -119,7 +121,7 @@ module.exports = function(grunt) {
                 showValid: true
             },
             gruntfile: {
-                src: ['Gruntfile.js'],
+                src: ['<%= gruntFilePaths %>'],
                 options: {
                     ignores: ['js-comments']
                 }
@@ -156,7 +158,7 @@ module.exports = function(grunt) {
             /* Please, take into account https://github.com/tschaub/grunt-newer/issues/39.
                TODO: Remove this warning when the issue will be closed. */
             gruntfile: {
-                src: ['Gruntfile.js']
+                src: ['<%= gruntFilePaths %>']
             },
             scripts: {
                 src: ['<%= srcScriptFilePaths %>']
@@ -171,7 +173,7 @@ module.exports = function(grunt) {
             /* Please, take into account https://github.com/tschaub/grunt-newer/issues/39.
              TODO: Remove this warning when the issue will be closed. */
             gruntfile: {
-                src: ['Gruntfile.js']
+                src: ['<%= gruntFilePaths %>']
             },
             scripts: {
                 src: ['<%= srcScriptFilePaths %>']
@@ -346,7 +348,7 @@ module.exports = function(grunt) {
 
         watch: {
             gruntfile: {
-                files: ['Gruntfile.js']
+                files: ['<%= gruntFilePaths %>']
             },
             scripts: {
                 files: ['<%= srcScriptFilePaths %>'],
@@ -448,24 +450,4 @@ module.exports = function(grunt) {
             grunt.log.oklns(configStr) :
             grunt.log.errorlns('Property "' + propertyName + '" is not defined.');
     });
-
-    // TODO: move to a new npm module 'github-repo-urlhelper'. Also, refactor gh-pages.deploy.options.repo.
-    // TODO: или научить grunt-github-releaser принимать полный repository url.
-    function getRepositoryShortPath() {
-        var url = pkg.repository && pkg.repository.url,
-            found;
-        if (!url) {
-            throw new Error('Repository URL not found in package.json, please define it: ' +
-                            'https://www.npmjs.org/doc/files/package.json.html#repository');
-        }
-
-        found = url.match(/.*github\.com[\/:]([^\.]*)(?:\.git)?/i);
-        found = found && found[1];
-        if (!found) {
-            throw new Error('Failed to parse repository URL from package.json. ' +
-                            'GitHub URL via HTTPS or SSH expected.');
-        }
-
-        return found;
-    }
 };
