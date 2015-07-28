@@ -1,4 +1,4 @@
-/*! Flexberry-javascript-project-template - v1.0.0 - 2014-12-04 */
+/*! Flexberry-javascript-project-template - v1.0.0 - 2015-07-28 */
 // Uses Node, AMD or browser globals to create a module.
 (function(root, factory) {
     'use strict';
